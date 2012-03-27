@@ -3,7 +3,6 @@ class Class_Server
 {
 	protected static $_siteId = null;
 	
-	protected static $_configPath = null;
 	protected static $_config = null;
 	protected static $_enviroment = 'production-server';
 	protected static $_libVersion = 'v1';
@@ -99,16 +98,8 @@ class Class_Server
 	protected static function getConfig()
 	{
 		if(self::$_config == null) {
-			if(is_null(self::$_configPath)) {
-				throw new Exception('config file server.ini required, use setConfigPath() to set the right path before usage!');
-			}
-			self::$_config = new Zend_Config_Ini(self::$_configPath, 'localhost');
+			self::$_config = new Zend_Config_Ini(BASE_PATH.'/configs/pm/server.ini', 'localhost');
 		}
 		return self::$_config;
-	}
-	
-	public static function setConfigPath($path)
-	{
-		self::$_configPath = $path;
 	}
 }

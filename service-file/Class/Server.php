@@ -1,40 +1,43 @@
 <?php
-class App_Server
+class Class_Server
 {
 	protected static $_config = null;
 	protected static $_enviroment = 'production-server';
-	protected static $_libType = 'cms';
 	protected static $_libVersion = 'v1';
-	protected static $_siteFolder = null;
+	protected static $_miscFolder = null;
 	
-	public static function ssoUrl()
+	public static function config($env, $miscFolder = 'test')
 	{
-		return "http://sso.eo.test";
-	}
-	
-	
-	public static function config($env, $libType, $libVersion, $siteFolder = null)
-	{
-		throw new Exception('moved to Class_Server');
-		
 		self::$_enviroment = $val;
-		self::$_libType = $libType;
-		self::$_libVersion = $libVersion;
-		self::$_siteFolder = $siteFolder;
+		self::$_miscFolder = $miscFolder;
 	}
 	
-	public static function getSiteFolder()
+	public static function getSiteUrl()
 	{
-		throw new Exception('moved to Class_Server');
-		
-		return self::$_siteFolder;
+		if(self::$_enviroment == 'production-server') {
+			return "http://file.enorange.com";
+		} else {
+			return "http://file.eo.test";
+		}
 	}
 	
 	public static function getEnv()
 	{
-		throw new Exception('moved to Class_Server');
-		
 		return self::$_enviroment;
+	}
+	
+	public static function setMiscFolder($mf)
+	{
+		if(self:: $_enviroment == 'production-server') {
+			self::$_miscFolder = $mf;
+		} else {
+			self::$_miscFolder = 'local-'.$mf;
+		}
+	}
+	
+	public static function getMiscFolder()
+	{
+		return self::$_miscFolder;
 	}
 	
 	public static function extUrl()
@@ -46,30 +49,24 @@ class App_Server
 	
 	public static function libUrl()
 	{
-		throw new Exception('moved to Class_Server');
-		
 		$url = "http://";
 		$url.= self::name('lib');
-		$url.= '/'.self::$_libType.'/'.self::$_libVersion;
+		$url.= '/file';
 		return $url;
 	}
 	
-	public static function miscUrl()
+	public static function miscUrl($appendMiscFolder = true)
 	{
-		throw new Exception('moved to Class_Server');
-		
 		$url = "http://";
 		$url.= self::name('misc');
-		if(!is_null(self::$_siteFolder)) {
-			$url.= '/'.self::$_siteFolder;
+		if($appendMiscFolder == true) {
+			$url.= '/'.self::$_miscFolder;
 		}
 		return $url;
 	}
 	
 	public static function name($type = null)
 	{
-		throw new Exception('moved to Class_Server');
-		
 		$config = self::getConfig();
 		$name = null;
 		switch($type) {
@@ -90,8 +87,6 @@ class App_Server
 	
 	protected static function getConfig()
 	{
-		throw new Exception('moved to Class_Server');
-		
 		if(self::$_config == null) {
 			self::$_config = new Zend_Config_Ini(APP_PATH.'/configs/server.ini', 'localhost');
 		}

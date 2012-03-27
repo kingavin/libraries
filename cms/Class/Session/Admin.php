@@ -79,7 +79,7 @@ class Class_Session_Admin
 			setcookie('liv', '', 1, '/');
     	} else {
     		$requestHost = $_SERVER['HTTP_HOST'];
-    		$topDomainName = getDomain($requestHost);
+    		$topDomainName = App_Func::getDomain($requestHost);
     		setcookie('adminType', '', 1, '/', $topDomainName);
 	    	setcookie('loginName', '', 1, '/', $topDomainName);
 			setcookie('roleId', '', 1, '/', $topDomainName);
