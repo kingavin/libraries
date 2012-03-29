@@ -8,16 +8,11 @@ class Class_Plugin_BrickRegister extends Zend_Controller_Plugin_Abstract
 		$bricks = $request->getParam('bricks');
 		
 		if($this->_registed != true && $bricks != 'disabled') {
-            $type = null;
-            if($request->getModuleName() == 'default') {
-                $type = 'default';
-            } else if($request->getModuleName() == 'admin') {
-                $type = 'admin';
-            }
+            $type = $request->getModuleName();
             $controllerName = $this->getRequest()->getControllerName();
 			$actionName = $this->getRequest()->getActionName();
 				
-            if($type == 'admin') {
+            if($type == 'admin' || $type == 'forbidden') {
             	
             } else {
             	$layoutFront = Class_Layout_Front::getInstance();

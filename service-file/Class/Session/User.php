@@ -26,6 +26,25 @@ class Class_Session_User
 		return md5($userData.self::$_md5salt.$userId.self::$_md5salt2.$startTimeStamp);
 	}
 	
+	public function hasSSOToken()
+	{
+		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
+			return true;
+		}
+		return false;
+	}
+	
+	public function getSSOToken()
+	{
+		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
+			return $_COOKIE['st'];
+		} else {
+			$token = md5(time());
+			setcookie('st', $token, time()+$this->_expTime, '/');
+			return $token;
+		}
+	}
+	
 	public function login($xml)
 	{
 		if($xml instanceof SimpleXMLElement) {
@@ -81,38 +100,6 @@ class Class_Session_User
 		return $this->_isLogin;
 	}
 	
-	public function hasSSOToken()
-	{
-		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
-			return true;
-		}
-		return false;
-	}
-	
-	public function getSSOToken()
-	{
-		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
-			return $_COOKIE['st'];
-		} else {
-			$token = md5(time());
-			setcookie('st', $token, time()+$this->_expTime, '/');
-			return $token;
-		}
-	}
-	
-	public function getRoleId()
-	{
-		 return 0;
-	}
-//
-//	public function getLoginName()
-//	{
-//		if($this->isLogin()) {
-//			return $_COOKIE['user_loginName'];
-//		}
-//		return 'nobody';
-//	}
-//
 	public function getUserId()
 	{
 		if($this->isLogin()) {

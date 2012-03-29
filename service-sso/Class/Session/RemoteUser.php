@@ -21,15 +21,18 @@ class Class_Session_RemoteUser
     	return self::$_instance;
     }
     
+    public static function encryptPassword($p)
+    {
+    	return md5($p.self::$_md5salt);
+    }
+    
     public function login($post)
     {
-    	$orgCode = $post['orgCode'];
     	$loginName = $post['loginName'];
     	$password = $post['password'];
     	
     	$ru = App_Factory::_m('RemoteUser');
-    	$ruDoc = $ru->addFilter('orgCode', $orgCode)
-    		->addFilter('loginName', $loginName)
+    	$ruDoc = $ru->addFilter('loginName', $loginName)
 //    		->addFilter('password', md5($password.self::$_md5salt))
     		->addFilter('password', $password)
     		->fetchOne();

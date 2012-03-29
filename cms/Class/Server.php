@@ -1,7 +1,10 @@
 <?php
 class Class_Server
 {
+	const API_KEY = 'zvmiopav7BbuifbahoUifbqov541huog5vua4ofaweafeq98fvvxreqh';
+	
 	protected static $_siteId = null;
+	protected static $_orgCode = null;
 	
 	protected static $_configPath = null;
 	protected static $_config = null;
@@ -9,12 +12,18 @@ class Class_Server
 	protected static $_libVersion = 'v1';
 	protected static $_siteFolder = null;
 	
-	public static function config($env, $libVersion, $siteId, $siteFolder = null)
+	public static function config($env, $libVersion, $siteId, $orgCode, $siteFolder = null)
 	{
 		self::$_enviroment = $env;
 		self::$_libVersion = $libVersion;
 		self::$_siteId = $siteId;
+		self::$_orgCode = $orgCode;
 		self::$_siteFolder = $siteFolder;
+	}
+	
+	public static function getSiteUrl()
+	{	
+		return 'http://'.$_SERVER['HTTP_HOST'];
 	}
 	
 	public static function setSiteId($id)
@@ -110,5 +119,10 @@ class Class_Server
 	public static function setConfigPath($path)
 	{
 		self::$_configPath = $path;
+	}
+	
+	public static function getOrgCode()
+	{
+		return self::$_orgCode;
 	}
 }

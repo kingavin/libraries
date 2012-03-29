@@ -81,13 +81,16 @@ abstract class App_Mongo_Db_Collection
 		}
 		
 		$query = array('_id' => $id);
-		
-		return $this->fetchOne($query, $fields);
+		$data = $this->getCollection()->findOne($query, $fields);
+		if(is_null($data)) {
+			return null;
+		}
+		return $this->create($data, false);
 	}
 	
-	public function fetchOne(array $query = array(), array $fields = array())
+	public function fetchOne()
 	{
-		$data = $this->getCollection()->findOne($query, $fields);
+		$data = $this->getCollection()->findOne($this->_filters, $this->_fields);
 		
 		if (is_null($data))
 			return null;

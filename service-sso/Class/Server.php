@@ -2,7 +2,7 @@
 class Class_Server
 {
 	protected static $_config = null;
-	protected static $_enviroment = 'production-server';
+	protected static $_enviroment = 'production';
 	protected static $_libVersion = 'v1';
 	protected static $_miscFolder = null;
 	
@@ -24,17 +24,14 @@ class Class_Server
 	
 	public static function extUrl()
 	{
-		$url = "http://";
-		$url.= self::name('ext').'/ext';
-		return $url;
+		$config = self::getConfig();
+		return $config->url->ext;
 	}
 	
 	public static function libUrl()
 	{
-		$url = "http://";
-		$url.= self::name('lib');
-		$url.= '/file';
-		return $url;
+		$config = self::getConfig();
+		return $config->url->lib;
 	}
 	
 	public static function miscUrl($appendMiscFolder = true)
@@ -47,30 +44,10 @@ class Class_Server
 		return $url;
 	}
 	
-	public static function name($type = null)
-	{
-		$config = self::getConfig();
-		$name = null;
-		switch($type) {
-			case 'ext':
-				$name = $config->ext->name;
-				break;
-			case 'lib':
-				$name = $config->lib->name;
-				break;
-			case 'misc':
-				$name = $config->misc->name;
-				break;
-			default:
-				throw new Exception('server type '.$type.' is not defined');
-		}
-		return $name;
-	}
-	
 	protected static function getConfig()
 	{
 		if(self::$_config == null) {
-			self::$_config = new Zend_Config_Ini(BASE_PATH.'/configs/sso/server.ini', 'localhost');
+			self::$_config = new Zend_Config_Ini(BASE_PATH.'/configs/pm/server.ini', self::$_enviroment);
 		}
 		return self::$_config;
 	}

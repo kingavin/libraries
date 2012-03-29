@@ -1,6 +1,8 @@
 <?php
 class Class_Server
 {
+	const API_KEY = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
+	
 	protected static $_config = null;
 	protected static $_enviroment = 'production-server';
 	protected static $_libVersion = 'v1';

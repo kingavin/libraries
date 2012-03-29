@@ -22,9 +22,9 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 							header("Location: ".Class_Server::getSiteUrl().'/admin');
 							break;
 						case '403':
-							//token not saved or expired, try to request a new token
+							//token not exist or expired, try to request with a new token
 							$ssoToken = $csu->getSSOToken();
-							$ssoLoginUrl = $sso->getLoginUrl('service-file', Class_Server::getSiteUrl().'/admin', $ssoToken);
+							$ssoLoginUrl = $sso->getLoginUrl('service-file', Class_Server::getSiteUrl().'/admin', $ssoToken, Class_Server::API_KEY);
 							header("Location: ".$ssoLoginUrl);
 							break;
 						default:
@@ -33,7 +33,7 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 					}
 				} else {
 					$ssoToken = $csu->getSSOToken();
-					$ssoLoginUrl = $sso->getLoginUrl('service-file', Class_Server::getSiteUrl().'/admin', $ssoToken);
+					$ssoLoginUrl = $sso->getLoginUrl('service-file', Class_Server::getSiteUrl().'/admin', $ssoToken, Class_Server::API_KEY);
 					header("Location: ".$ssoLoginUrl);
 				}
 			}

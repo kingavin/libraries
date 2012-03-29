@@ -20,8 +20,15 @@ class App_SSO
 		return array($ret, $body);
 	}
 	
-	public function getLoginUrl($consumer, $returnUrl, $ssoToken)
+	public function getLoginUrl($consumer, $returnUrl, $token, $apiKey)
 	{
-		return App_Server::ssoUrl().'/sso/login?consumer='.urlencode($consumer).'&ret='.urlencode($returnUrl).'&token='.urlencode($ssoToken);
+		$timeStamp = time();
+		$sig = md5($consumer.$returnUrl.$timeStamp.$token.$apiKey);
+		
+		$c = urlencode($consumer);
+		$r = urlencode($returnUrl);
+		$t = urlencode($token);
+		
+		return App_Server::ssoUrl().'/sso/login?consumer='.$c.'&ret='.$r.'&timeStamp='.$timeStamp.'&token='.$t.'&sig='.$sig;
 	}
 }
