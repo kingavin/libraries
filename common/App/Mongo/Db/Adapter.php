@@ -35,7 +35,7 @@ class App_Mongo_Db_Adapter
             return;
         }
         
-        $m = new Mongo($this->_dbHost, array('persist' => 'x'));
+        $m = new Mongo("mongodb://craftgavin:whothirstformagic?@".$this->_dbHost, array('persist' => 'x'));
         $this->_connection = $m->selectDb($this->_dbName);
         return;
     }

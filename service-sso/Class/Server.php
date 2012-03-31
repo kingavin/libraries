@@ -44,10 +44,16 @@ class Class_Server
 		return $url;
 	}
 	
+	public static function getMongoServer()
+	{
+		$config = self::getConfig();
+		return $config->server->mongo;
+	}
+	
 	protected static function getConfig()
 	{
 		if(self::$_config == null) {
-			self::$_config = new Zend_Config_Ini(BASE_PATH.'/configs/pm/server.ini', self::$_enviroment);
+			self::$_config = new Zend_Config_Ini(BASE_PATH.'/configs/sso/server.ini', self::$_enviroment);
 		}
 		return self::$_config;
 	}
