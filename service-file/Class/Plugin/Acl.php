@@ -40,21 +40,21 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 				$folder = $csu->getUserId();
 				Class_Server::setMiscFolder($folder);
 				
-				$roleId = $csu->getRoleId();
-				$moduleName = $request->getModuleName();
-				$controllerName = $request->getControllerName();
-				$actionName = $request->getActionName();
-	
-				$acl = Class_Acl::getInstance();
-				if(!$acl->isAllowed($roleId, $moduleName.'-'.$controllerName, $actionName)) {
-					if($roleId == 'nobody') {
-						$request->setControllerName('anonymous');
-						$request->setActionName('index');
-					} else {
-						$request->setControllerName('anonymous');
-						$request->setActionName('no-privilege');
-					}
-				}
+//				$roleId = $csu->getRoleId();
+//				$moduleName = $request->getModuleName();
+//				$controllerName = $request->getControllerName();
+//				$actionName = $request->getActionName();
+//	
+//				$acl = Class_Acl::getInstance();
+//				if(!$acl->isAllowed($roleId, $moduleName.'-'.$controllerName, $actionName)) {
+//					if($roleId == 'nobody') {
+//						$request->setControllerName('anonymous');
+//						$request->setActionName('index');
+//					} else {
+//						$request->setControllerName('anonymous');
+//						$request->setActionName('no-privilege');
+//					}
+//				}
 			}
 		}
 	}

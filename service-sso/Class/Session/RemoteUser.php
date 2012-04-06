@@ -39,11 +39,13 @@ class Class_Session_RemoteUser
     		
 		if(!is_null($ruDoc)) {
 			$userId = $ruDoc->getId();
+			$userType = $ruDoc->userType;
 			$orgCode = $ruDoc->orgCode;
 			$loginName = $ruDoc->loginName;
 			$orgName = $ruDoc->orgName;
 	    	$startTimeStamp = time();
 	    	$userData = Zend_Json::encode(array(
+	    		'userType' => $userType,
 	        	'orgCode' => $orgCode,
 	    		'orgName' => $orgName,
 	        	'loginName' => $loginName
