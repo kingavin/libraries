@@ -6,7 +6,7 @@ class App_SSO
 		$curl = curl_init('http://sso.enorange.com/sso/info/format/xml');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, array('st' => $st));
+		curl_setopt($curl, CURLOPT_POSTFIELDS, array('token' => $st));
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		
 		$body = curl_exec($curl);

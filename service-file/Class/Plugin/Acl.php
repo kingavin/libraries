@@ -11,11 +11,11 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 				if($csu->hasSSOToken()) {
 					$st = $csu->getSSOToken();
 					$response = $sso->auth($st);
-					 
 					$responseCode = $response[0];
 					$xmlBody = $response[1];
 					
 					$xml = new SimpleXMLElement($xmlBody);
+					
 					switch($responseCode) {
 						case '200':
 							$csu->login($xml);
