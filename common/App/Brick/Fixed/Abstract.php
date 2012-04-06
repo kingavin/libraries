@@ -5,14 +5,13 @@ abstract class App_Brick_Fixed_Abstract implements App_Brick_Interface
 	
 	public function path()
 	{
-		$path = str_replace('_', '/', $this->_getExtName());
-		return '/brick/'.$path;
+		return BASE_PATH.'/extension/common/'.$this->_getExtName();
 	}
 
 	public function render()
 	{
 		$this->view = new App_Brick_Fixed_TwigView();
-		$this->view->setScriptPath(CONTAINER_PATH.'/extension'.$this->path());
+		$this->view->setScriptPath($this->path());
 		
 		$this->prepare();
 		return $this->view->render('view.tpl');

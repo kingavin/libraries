@@ -3,9 +3,9 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		$csu = Class_Session_User::getInstance();
-		
-		if($request->getModuleName() != 'default') {
+		if($request->getModuleName() == 'admin' || $request->getModuleName() == 'rest') {
+			$csu = Class_Session_User::getInstance();
+			
 			if(!$csu->isLogin()) {
 				$sso = new App_SSO();
 				if($csu->hasSSOToken()) {
@@ -36,9 +36,7 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 					$ssoLoginUrl = $sso->getLoginUrl('service-file', Class_Server::getSiteUrl().'/admin', $ssoToken, Class_Server::API_KEY);
 					header("Location: ".$ssoLoginUrl);
 				}
-			}
-			
-			if($csu->isLogin()) {
+			} else {
 				$folder = $csu->getUserId();
 				Class_Server::setMiscFolder($folder);
 				
@@ -57,9 +55,6 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 						$request->setActionName('no-privilege');
 					}
 				}
-			} else {
-				$request->setControllerName('anonymous');
-				$request->setActionName('index');
 			}
 		}
 	}

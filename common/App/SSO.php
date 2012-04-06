@@ -3,9 +3,7 @@ class App_SSO
 {
 	public function auth($st)
 	{
-		$url = App_Server::ssoUrl();
-		
-		$curl = curl_init($url.'/sso/info/format/xml');
+		$curl = curl_init('http://sso.enorange.com/sso/info/format/xml');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, array('st' => $st));
@@ -29,6 +27,6 @@ class App_SSO
 		$r = urlencode($returnUrl);
 		$t = urlencode($token);
 		
-		return App_Server::ssoUrl().'/sso/login?consumer='.$c.'&ret='.$r.'&timeStamp='.$timeStamp.'&token='.$t.'&sig='.$sig;
+		return 'http://sso.enorange.com/sso/login?consumer='.$c.'&ret='.$r.'&timeStamp='.$timeStamp.'&token='.$t.'&sig='.$sig;
 	}
 }

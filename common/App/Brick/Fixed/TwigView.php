@@ -22,14 +22,9 @@ class App_Brick_Fixed_TwigView implements Zend_View_Interface
      * @param array $envOptions options to set on the environment
      * @return void
      */
-    public function __construct($templatePath=null, $envOptions=array())
+    public function __construct()
     {
-        $this->_twig = new Twig_Environment(null, $envOptions);
-        $this->_twig->addFilter('outputImage', new Twig_Filter_Function('Class_HTML::outputImage'));
-        $this->_twig->addFilter('substr', new Twig_Filter_Function('Class_HTML::substr'));
-        if (null !== $templatePath) {
-            $this->setScriptPath($templatePath);
-        }
+        $this->_twig = new Twig_Environment(null);
     }
 
     /**

@@ -123,6 +123,25 @@ abstract class App_Mongo_Db_Collection
 		return $cursor;
 	}
 	
+	public function fetchDoc()
+	{
+		$cursor = $this->getCollection()->find($this->_filters, $this->_fields);
+		
+		if(!is_null($this->_page) && !is_null($this->_pageSize)) {
+			$start = ($this->_page - 1) * $this->_pageSize ;
+			$cursor->limit($this->_pageSize)->skip($start);
+		}
+		
+		if(!is_null($this->_sort)) {
+			$cursor->sort($this->_sort);
+		}
+		$docs = array();
+		foreach($cursor as $id => $row) {
+			$docs[] = $this->create($row, false);
+		}
+		return $docs;
+	}
+	
 	public function count()
 	{
 		$cursor = $this->getCollection()->find($this->_filters, array('_id'))->count();
