@@ -108,6 +108,7 @@ class Class_Image
                 imagegif($this->_im, $filename, $quality);
                 break;
             case self::TYPE_PNG:
+            	$quality = ($quality - 10) / 9;
                 imagepng($this->_im, $filename, $quality);
                 break;
             default:
