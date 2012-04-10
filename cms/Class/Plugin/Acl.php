@@ -3,9 +3,7 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-    	if($request->getModuleName() == 'forbidden') {
-    		
-    	} else if($request->getModuleName() == 'admin') {
+    	if($request->getModuleName() == 'admin') {
         	$csa = Class_Session_Admin::getInstance();
         	
         	if(!$csa->isLogin()) {
@@ -40,8 +38,8 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 				}
 			} else {
 				if(!$csa->isResourceOwner()) {
-					$request->setModuleName('forbidden');
-					$request->setControllerName('admin');
+					$request->setModuleName('default');
+					$request->setControllerName('forbidden');
 					$request->setActionName('not-resource-owner');
 				} else {
 		        	$roleId = $csa->getRoleId();

@@ -1,48 +1,23 @@
 <?php
-class Class_Session_Admin
+class Class_Session_User extends App_Session_SsoUser
 {
-	private function __construct(){}
-	private function __clone(){}
-	private static $_instance = null;
-	
-	private static $_md5salt = 'Hgoc&639Jgo';
-	private static $_md5salt2 = 'jiohGY6&*9';
-	
+	private static $_md5salt = 'lp[9Ho567b1&';
+	private static $_md5salt2 = 's32*gnBUIOfg';
+
+	protected static $_instance = null;
 	private $_isLogin = null;
-	private $_expTime = 3600;
-    /**
-     * @return Class_Session_Admin
-     */
-    public static function getInstance()
-    {
-    	if(is_null(self::$_instance)) {
-    		self::$_instance = new self();
-    	}
-    	return self::$_instance;
-    }
-    
+	
+	public static function getInstance()
+	{
+		if(is_null(self::$_instance)) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+	
 	public static function getLiv($userData, $userId, $startTimeStamp)
 	{
 		return md5($userData.self::$_md5salt.$userId.self::$_md5salt2.$startTimeStamp);
-	}
-    
-	public function hasSSOToken()
-	{
-		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
-			return true;
-		}
-		return false;
-	}
-	
-	public function getSSOToken()
-	{
-		if(isset($_COOKIE['st']) && $_COOKIE['st'] != '') {
-			return $_COOKIE['st'];
-		} else {
-			$token = md5(time());
-			setcookie('st', $token, time()+$this->_expTime, '/');
-			return $token;
-		}
 	}
 	
 	public function login($xml)
@@ -115,33 +90,5 @@ class Class_Session_Admin
 			return $userData[$key];
 		}
 		return null;
-	}
-	
-	public function getSessionData($key)
-	{
-		if(isset($_COOKIE[$key])) {
-			return $key;
-		}
-		return null;
-	}
-	
-	public function _updateCookie($cookies)
-	{
-		foreach($cookies as $k => $v) {
-    		setcookie($k, $v, time()+$this->_expTime, '/');
-    	}
-	}
-	
-	public function getRoleId()
-	{
-		return 0;
-	}
-	
-	public function isResourceOwner()
-	{
-		if($this->getUserData('orgCode') == Class_Server::getOrgCode()) {
-			return true;
-		}
-		return false;
 	}
 }
