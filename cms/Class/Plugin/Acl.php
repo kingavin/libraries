@@ -58,7 +58,9 @@ class Class_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 		            }
 				}
 			}
-        } else {
+        } else if($request->getModuleName() == 'rest') { 
+        	
+    	} else {
         	$clf = Class_Layout_Front::getInstance();
         	$resource = $clf->getResource();
         	

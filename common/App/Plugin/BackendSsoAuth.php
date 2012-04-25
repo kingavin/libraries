@@ -1,22 +1,24 @@
 <?php
 class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 {
-	protected $_csu;
-	protected $_serverUrl;
+	const CMS = 'cms';
+	const PM = 'pm';
+	const SERVICE_FILE = 'service-file';
+	
+	protected $_assu;
 	protected $_serviceType;
 	protected $_apiKey;
 	
-	public function __construct(App_Session_SsoUser $csu, $serverUrl, $serviceType, $apiKey)
+	public function __construct(App_Session_SsoUser $assu, $serviceType, $apiKey)
 	{
-		$this->_csu = $csu;
-		$this->_serverUrl = $serverUrl;
+		$this->_assu = $assu;
 		$this->_serviceType = $serviceType;
 		$this->_apiKey = $apiKey;
 	}
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		$csu = $this->_csu;
+		$csu = $this->_assu;
 		if($request->getModuleName() == 'admin' || $request->getModuleName() == 'rest') {
 			if(!$csu->isLogin()) {
 				if($csu->hasSSOToken()) {
@@ -29,12 +31,14 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 						case '200':
 							$xml = new SimpleXMLElement($xmlBody);
 							$csu->login($xml);
-							header("Location: ".$this->_serverUrl);
+							$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+							header("Location: ".$retUrl);
 							break;
 						case '403':
 							//token not exist or expired, try to request with a new token
 							$ssoToken = $csu->getSSOToken();
-							$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $this->_serverUrl, $ssoToken);
+							$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+							$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $retUrl, $ssoToken);
 							header("Location: ".$ssoLoginUrl);
 							break;
 						default:
@@ -43,7 +47,8 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 					}
 				} else {
 					$ssoToken = $csu->getSSOToken();
-					$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $this->_serverUrl, $ssoToken);
+					$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+					$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $retUrl, $ssoToken);
 					header("Location: ".$ssoLoginUrl);
 				}
 			}

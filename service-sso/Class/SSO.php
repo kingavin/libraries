@@ -14,14 +14,40 @@ class Class_SSO
 		}
 		
 		switch($consumer) {
+			case 'cms':
+				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_CMS_KEY);
+				break;
+			case 'pm':
+				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_PM_KEY);
+				break;
 			case 'service-file':
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_FILE_KEY);
 				break;
-			case 'service-cms':
+		}
+		
+		if($sigGenerated == $sig) {
+			return 'success';
+		}
+		return 'fail';
+	}
+	
+	static public function validateSig($consumer, $timeStamp, $token, $sig, $timeout = 1800)
+	{
+		$serverTime = time();
+		
+		if($serverTime - $timeStamp > $timeout) {
+			return 'timeout';
+		}
+		
+		switch($consumer) {
+			case 'cms':
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_CMS_KEY);
 				break;
-			case 'service-pm':
+			case 'pm':
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_PM_KEY);
+				break;
+			case 'service-file':
+				$sigGenerated = md5($consumer.$timeStamp.$token.self::SERVICE_FILE_KEY);
 				break;
 		}
 		

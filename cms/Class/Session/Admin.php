@@ -1,15 +1,12 @@
 <?php
-class Class_Session_Admin
+class Class_Session_Admin extends App_Session_SsoUser
 {
-	private function __construct(){}
-	private function __clone(){}
 	private static $_instance = null;
 	
 	private static $_md5salt = 'Hgoc&639Jgo';
 	private static $_md5salt2 = 'jiohGY6&*9';
 	
 	private $_isLogin = null;
-	private $_expTime = 3600;
     /**
      * @return Class_Session_Admin
      */
@@ -85,16 +82,14 @@ class Class_Session_Admin
 	public function isLogin()
 	{
 		if($this->_isLogin == null) {
+			$this->_isLogin = false;
 			if(isset($_COOKIE['userId']) && $_COOKIE['userId'] != '') {
 				$livToken = self::getLiv($_COOKIE['userData'], $_COOKIE['userId'], $_COOKIE['startTimeStamp']);
 				if($livToken == $_COOKIE['liv']) {
-					$this->_isLogin = true;
-				} else {
-					$this->_isLogin = false;
-					$this->logout();
+					if($this->getUserData('orgCode') == Class_Server::getOrgCode()) {
+						$this->_isLogin = true;
+					}
 				}
-			} else {
-				$this->_isLogin = false;
 			}
 		}
 		return $this->_isLogin;
