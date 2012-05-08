@@ -4,7 +4,7 @@ class Class_Server
 	const API_KEY = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 	
 	protected static $_config = null;
-	protected static $_enviroment = 'production-server';
+	protected static $_enviroment = 'production';
 	protected static $_libVersion = 'v1';
 	protected static $_miscFolder = null;
 	
@@ -100,5 +100,14 @@ class Class_Server
 			self::$_config = new Zend_Config_Ini(APP_PATH.'/configs/server.ini', 'localhost');
 		}
 		return self::$_config;
+	}
+	
+	public static function getMongoServer()
+	{
+		if(self::$_enviroment == 'production') {
+			return 'mongodb://craftgavin:whothirstformagic?@58.51.194.8';
+		} else {
+			return '127.0.0.1';
+		}
 	}
 }
