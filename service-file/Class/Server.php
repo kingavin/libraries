@@ -55,9 +55,9 @@ class Class_Server
 	public static function libUrl()
 	{
 		if(self::$_enviroment == 'production') {
-			$url = "http://tempst.enorange.com/cms/v1";
+			$url = "http://tempst.enorange.com/file";
 		} else {
-			$url = "http://lib.eo.test/cms/v1";
+			$url = "http://lib.eo.test/file";
 		}
 		return $url;
 	}
