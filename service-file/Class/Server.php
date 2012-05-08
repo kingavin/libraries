@@ -10,7 +10,7 @@ class Class_Server
 	
 	public static function config($env, $miscFolder = 'test')
 	{
-		self::$_enviroment = $val;
+		self::$_enviroment = $env;
 		self::$_miscFolder = $miscFolder;
 	}
 	
@@ -85,6 +85,13 @@ class Class_Server
 				throw new Exception('server type '.$type.' is not defined');
 		}
 		return $name;
+	}
+	
+	public static function getOrgCode()
+	{
+		$controller = Zend_Controller_Front::getInstance();
+		$orgCode = $controller->getRequest()->getParam('orgCode');
+		return $orgCode;
 	}
 	
 	protected static function getConfig()

@@ -1,15 +1,13 @@
 <?php
-class Class_Session_User
+class Class_Session_User extends App_Session_SsoUser
 {
-	private function __construct(){}
-	private function __clone(){}
 	private static $_instance = null;
 
 	private static $_md5salt = '^;1[djw#1&';
 	private static $_md5salt2 = 'cH)b3u(7689)(*';
 
 	private $_isLogin = null;
-	private $_expTime = 3600;
+	private $_hasPrivilege = false;
 	/**
 	 * @return Class_Session_User
 	 */
@@ -100,6 +98,21 @@ class Class_Session_User
 		return $this->_isLogin;
 	}
 	
+	public function hasPrivilege()
+	{
+		if(!$this->isLogin()) {
+			return false;
+		}
+		
+		if(
+			$this->getUserData('userType') != 'designer' &&
+			($this->getUserData('orgCode') != Class_Server::getOrgCode())
+		) {
+			return false;
+		}
+		return true;
+	}
+	
 	public function getUserId()
 	{
 		if($this->isLogin()) {
@@ -116,6 +129,30 @@ class Class_Session_User
 		}
 		return null;
 	}
+	
+	public function getHomeLocation()
+	{
+		return "/admin/".$this->getUserData('orgCode');
+	}
+	
+//	static public function setOrgCode($orgCode)
+//	{
+//		$_SESSION['presetOrgCode'] = $orgCode;
+//	}
+	
+//	public function getOrgCode()
+//	{
+//		if($this->getUserData('userType') == 'designer') {
+//			$presetOrgCode = $_SESSION['presetOrgCode'];
+//			if(is_null($presetOrgCode)) {
+//				throw new Exception('org code is empty or it is not saved in the session');
+//			} else {
+//				return $presetOrgCode;
+//			}
+//		} else {
+//			return $this->getUserData('orgCode');
+//		}
+//	}
 	
 	public function _updateCookie($cookies)
 	{

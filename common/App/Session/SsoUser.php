@@ -32,6 +32,8 @@ abstract class App_Session_SsoUser
     	}
 	}
 	
+	abstract public function hasPrivilege();
+	
 	abstract public function login($data);
 	
 	abstract public function logout();

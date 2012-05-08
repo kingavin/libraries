@@ -82,17 +82,38 @@ class Class_Session_Admin extends App_Session_SsoUser
 	public function isLogin()
 	{
 		if($this->_isLogin == null) {
-			$this->_isLogin = false;
 			if(isset($_COOKIE['userId']) && $_COOKIE['userId'] != '') {
 				$livToken = self::getLiv($_COOKIE['userData'], $_COOKIE['userId'], $_COOKIE['startTimeStamp']);
 				if($livToken == $_COOKIE['liv']) {
-					if($this->getUserData('orgCode') == Class_Server::getOrgCode()) {
-						$this->_isLogin = true;
-					}
+					$this->_isLogin = true;
+				} else {
+					$this->_isLogin = false;
+					$this->logout();
 				}
+			} else {
+				$this->_isLogin = false;
 			}
 		}
 		return $this->_isLogin;
+	}
+	
+	public function hasPrivilege()
+	{
+		if(!$this->isLogin()) {
+			return false;
+		}
+		if(
+			$this->getUserData('userType') != 'designer' &&
+			($this->getUserData('orgCode') != Class_Server::getOrgCode())
+		) {
+			return false;
+		}
+		return true;
+	}
+	
+	public function getHomeLocation()
+	{
+		return '/';
 	}
 	
 	public function getUserId()
@@ -110,6 +131,11 @@ class Class_Session_Admin extends App_Session_SsoUser
 			return $userData[$key];
 		}
 		return null;
+	}
+	
+	public function getOrgCode()
+	{
+		return Class_Server::getOrgCode();
 	}
 	
 	public function getSessionData($key)

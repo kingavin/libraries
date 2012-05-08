@@ -4,6 +4,8 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 	const CMS = 'cms';
 	const PM = 'pm';
 	const SERVICE_FILE = 'service-file';
+	const SERVICE_FORM = 'service-form';
+	const SERVICE_FORUM = 'service-forum';
 	
 	protected $_assu;
 	protected $_serviceType;
@@ -21,6 +23,11 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 		$csu = $this->_assu;
 		if($request->getModuleName() == 'admin' || $request->getModuleName() == 'rest') {
 			if(!$csu->isLogin()) {
+				if(strpos($_SERVER["REQUEST_URI"], 'http://') !== false) {
+					$retUrl = $_SERVER["REQUEST_URI"];
+				} else {
+					$retUrl = 'http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+				}
 				if($csu->hasSSOToken()) {
 					$st = $csu->getSSOToken();
 					$response = $this->_auth($st);
@@ -31,26 +38,28 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 						case '200':
 							$xml = new SimpleXMLElement($xmlBody);
 							$csu->login($xml);
-							$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 							header("Location: ".$retUrl);
-							break;
+							exit(0);
 						case '403':
 							//token not exist or expired, try to request with a new token
 							$ssoToken = $csu->getSSOToken();
-							$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 							$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $retUrl, $ssoToken);
 							header("Location: ".$ssoLoginUrl);
-							break;
+							exit(0);
 						default:
-							echo "error while getting identity from server!";
+							echo "error while getting identity from sso server!";
 							exit(1);
 					}
 				} else {
 					$ssoToken = $csu->getSSOToken();
-					$retUrl = $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 					$ssoLoginUrl = $this->_getLoginUrl($this->_serviceType, $retUrl, $ssoToken);
 					header("Location: ".$ssoLoginUrl);
+					exit(0);
 				}
+			} else if(!$csu->hasPrivilege()) {
+				$homeLocation = $csu->getHomeLocation();
+				header("Location: ".$homeLocation);
+				exit(0);
 			}
 		}
 	}

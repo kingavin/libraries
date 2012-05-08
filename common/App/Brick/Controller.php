@@ -46,7 +46,7 @@ class App_Brick_Controller
         if(is_file(CONTAINER_PATH.'/extension/brick/'.$folderPath.'/'.$fileName.'.php')) {
             require_once CONTAINER_PATH.'/extension/brick/'.$folderPath.'/'.$fileName.'.php';
         } else {
-            throw new Class_Brick_Exception('Brick file: '.CONTAINER_PATH.'/extension/brick/'.$folderPath.'/'.$fileName.'.php'.' not exist for '.$className);
+            throw new App_Brick_Exception('Brick file: '.CONTAINER_PATH.'/extension/brick/'.$folderPath.'/'.$fileName.'.php'.' not exist for '.$className);
         }
 	    $fixedBrick = new $className();
 	    return $fixedBrick;
@@ -104,7 +104,7 @@ class App_Brick_Controller
     {
     	$solidBrickList = $this->_flexiBrickList;
     	
-    	$brickHTML = "没有找到对应brick-id:".$brickId."的内容";
+    	$brickHTML = "brick-id:".$brickId;
     	foreach($solidBrickList as $solidBrick) {
     		if($solidBrick->getBrickId() == $brickId) {
     			$brickHTML = $solidBrick->render();

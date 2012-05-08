@@ -123,6 +123,31 @@ abstract class App_Mongo_Db_Collection
 		return $cursor;
 	}
 	
+	public function fetchArr($convertId = false)
+	{
+		$cursor = $this->getCollection()->find($this->_filters, $this->_fields);
+		
+		if(!is_null($this->_page) && !is_null($this->_pageSize)) {
+			$start = ($this->_page - 1) * $this->_pageSize ;
+			$cursor->limit($this->_pageSize)->skip($start);
+		}
+		
+		if(!is_null($this->_sort)) {
+			$cursor->sort($this->_sort);
+		}
+		
+		if($convertId) {
+			$data = array();
+			foreach($cursor as $id => $row) {
+				$row['id'] = $id;
+				unset($row['_id']);
+				$data[] = $row;
+			}
+			return $data;
+		}
+		return $cursor;
+	}
+	
 	public function fetchDoc()
 	{
 		$cursor = $this->getCollection()->find($this->_filters, $this->_fields);

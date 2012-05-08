@@ -21,6 +21,18 @@ class Class_Server
 		self::$_siteFolder = $siteFolder;
 	}
 	
+	public static function getImageUrl()
+	{
+		return 'http://storage.aliyun.com/public-misc';
+	}
+	
+	public static function getImageFolderUrl()
+	{
+		$url = self::getImageUrl();
+		$url.= '/'.self::$_orgCode;
+		return $url;
+	}
+	
 	public static function getSiteUrl()
 	{	
 		return 'http://'.$_SERVER['HTTP_HOST'];

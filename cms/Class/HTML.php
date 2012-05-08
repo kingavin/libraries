@@ -50,7 +50,7 @@ class Class_HTML
 		if(isset($urlArr['host'])) {
 			return $url;
 		} else {
-			return App_Server::miscUrl().'/'.$url;
+			return Class_Server::getImageUrl().'/'.$url;
 		}
 	}
 }
