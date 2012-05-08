@@ -95,6 +95,16 @@ class Class_Server
 		return $url;
 	}
 	
+	public static function getFileServer()
+	{
+		if(self::$_enviroment == 'production') {
+			$url = "http://file.enorange.com";
+		} else {
+			$url = "http://file.eo.test";
+		}
+		return $url;
+	}
+	
 	public static function miscUrl()
 	{
 		$url = "http://";
