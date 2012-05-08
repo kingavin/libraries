@@ -75,7 +75,7 @@ class Class_Server
 	public static function extUrl()
 	{
 		if(self::$_enviroment == 'production') {
-			$url = "http://tempst.enorange.com/ext";
+			$url = "http://st.onlinefu.com/ext";
 		} else {
 			$url = "http://lib.eo.test/ext";
 		}
@@ -88,7 +88,7 @@ class Class_Server
 //		$url.= self::name('lib');
 //		$url.= '/cms/'.self::$_libVersion;
 		if(self::$_enviroment == 'production') {
-			$url = "http://tempst.enorange.com/cms/v1";
+			$url = "http://st.onlinefu.com/cms/v1";
 		} else {
 			$url = "http://lib.eo.test/cms/v1";
 		}

@@ -16,7 +16,7 @@ class Class_Server
 	
 	public static function getSiteUrl()
 	{
-		if(self::$_enviroment == 'production-server') {
+		if(self::$_enviroment == 'production') {
 			return "http://file.enorange.com";
 		} else {
 			return "http://file.eo.test";
@@ -30,7 +30,7 @@ class Class_Server
 	
 	public static function setMiscFolder($mf)
 	{
-		if(self:: $_enviroment == 'production-server') {
+		if(self:: $_enviroment == 'production') {
 			self::$_miscFolder = $mf;
 		} else {
 			self::$_miscFolder = 'local-'.$mf;
@@ -45,7 +45,7 @@ class Class_Server
 	public static function extUrl()
 	{
 		if(self::$_enviroment == 'production') {
-			$url = "http://tempst.enorange.com/ext";
+			$url = "http://st.onlinefu.com/ext";
 		} else {
 			$url = "http://lib.eo.test/ext";
 		}
@@ -55,7 +55,7 @@ class Class_Server
 	public static function libUrl()
 	{
 		if(self::$_enviroment == 'production') {
-			$url = "http://tempst.enorange.com/file";
+			$url = "http://st.onlinefu.com/file";
 		} else {
 			$url = "http://lib.eo.test/file";
 		}
