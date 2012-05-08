@@ -74,16 +74,24 @@ class Class_Server
 	
 	public static function extUrl()
 	{
-		$url = "http://";
-		$url.= self::name('ext').'/ext';
+		if(self::$_enviroment == 'production') {
+			$url = "http://tempst.enorange.com/ext";
+		} else {
+			$url = "http://lib.eo.test/ext";
+		}
 		return $url;
 	}
 	
 	public static function libUrl()
 	{
-		$url = "http://";
-		$url.= self::name('lib');
-		$url.= '/cms/'.self::$_libVersion;
+//		$url = "http://";
+//		$url.= self::name('lib');
+//		$url.= '/cms/'.self::$_libVersion;
+		if(self::$_enviroment == 'production') {
+			$url = "http://tempst.enorange.com/cms/v1";
+		} else {
+			$url = "http://lib.eo.test/cms/v1";
+		}
 		return $url;
 	}
 	
