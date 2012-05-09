@@ -138,13 +138,13 @@ class Class_Session_Admin extends App_Session_SsoUser
 		return Class_Server::getOrgCode();
 	}
 	
-	public function getSessionData($key)
-	{
-		if(isset($_COOKIE[$key])) {
-			return $key;
-		}
-		return null;
-	}
+//	public function getSessionData($key)
+//	{
+//		if(isset($_COOKIE[$key])) {
+//			return $key;
+//		}
+//		return null;
+//	}
 	
 	public function _updateCookie($cookies)
 	{
