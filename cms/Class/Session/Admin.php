@@ -165,4 +165,16 @@ class Class_Session_Admin extends App_Session_SsoUser
 		}
 		return false;
 	}
+	
+	public function setSessionData($name, $value)
+	{
+		$session = new Zend_Session_Namespace('admin');
+		$session->$name = $value;
+	}
+    
+	public function getSessionData($name)
+	{
+		$session = new Zend_Session_Namespace('admin');
+		return $session->$name;
+	}
 }
