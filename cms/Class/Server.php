@@ -8,7 +8,7 @@ class Class_Server
 	
 	protected static $_configPath = null;
 	protected static $_config = null;
-	protected static $_enviroment = 'production-server';
+	protected static $_enviroment = 'production';
 	protected static $_libVersion = 'v1';
 	protected static $_siteFolder = null;
 	
@@ -154,5 +154,14 @@ class Class_Server
 	public static function getOrgCode()
 	{
 		return self::$_orgCode;
+	}
+	
+	public static function getMongoServer()
+	{
+		if(self::$_enviroment == 'production') {
+			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
+		} else {
+			return '127.0.0.1';
+		}
 	}
 }
