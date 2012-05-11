@@ -66,7 +66,7 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 	
 	protected function _auth($st)
 	{
-		$curl = curl_init('http://sso.enorange.com/sso/info/format/xml');
+		$curl = curl_init('http://sso.enorange.cn/sso/info/format/xml');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, array('token' => $st));
@@ -91,6 +91,6 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 		$r = urlencode($returnUrl);
 		$t = urlencode($token);
 		
-		return 'http://sso.enorange.com/sso/login?consumer='.$c.'&ret='.$r.'&timeStamp='.$timeStamp.'&token='.$t.'&sig='.$sig;
+		return 'http://sso.enorange.cn/sso/login?consumer='.$c.'&ret='.$r.'&timeStamp='.$timeStamp.'&token='.$t.'&sig='.$sig;
 	}
 }
