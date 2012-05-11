@@ -8,9 +8,9 @@ class Class_Server
 	protected static $_enviroment = 'production';
 	protected static $_orgCode = null;
 	
-	public static function config($env)
+	public static function config()
 	{
-		self::$_enviroment = $env;
+		self::$_enviroment = APP_ENV;
 	}
 	
 	protected static function getConfig()
@@ -34,14 +34,22 @@ class Class_Server
 	
 	public static function extUrl()
 	{
-		$config = self::getConfig();
-		return $config->url->ext;
+		if(self::$_enviroment == 'production') {
+			$url = "http://st.onlinefu.com/ext";
+		} else {
+			$url = "http://lib.eo.test/ext";
+		}
+		return $url;
 	}
 	
 	public static function libUrl()
 	{
-		$config = self::getConfig();
-		return $config->url->lib;
+		if(self::$_enviroment == 'production') {
+			$url = "http://st.onlinefu.com/forum";
+		} else {
+			$url = "http://lib.eo.test/forum";
+		}
+		return $url;
 	}
 	
 	public static function domain($type)
