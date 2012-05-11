@@ -1,9 +1,12 @@
 <?php
 class Class_Server
 {
-	protected static $_serverId = null;
+	const API_KEY = 'fbewabosbvdu09yb67f868r3bu2btp9hv8sa9vgugqabnuiobUIbbfiepbu43';
+	
+//	protected static $_serverId = null;
 	protected static $_config = null;
 	protected static $_enviroment = 'production';
+	protected static $_orgCode = null;
 	
 	public static function config($env)
 	{
@@ -50,5 +53,23 @@ class Class_Server
 				
 		}
 		return null;
+	}
+	
+	public static function getOrgCode()
+	{
+		if(is_null(self::$_orgCode)) {
+			$pathPieces = explode('/', $_SERVER["REQUEST_URI"]);
+			self::$_orgCode = $pathPieces[3];
+		}
+		return self::$_orgCode;
+	}
+	
+	public static function getMongoServer()
+	{
+		if(self::$_enviroment == 'production') {
+			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
+		} else {
+			return '127.0.0.1';
+		}
 	}
 }

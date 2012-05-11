@@ -132,7 +132,7 @@ class Class_Session_User extends App_Session_SsoUser
 	
 	public function getHomeLocation()
 	{
-		return '/'.$this->getUserData('orgCode')."/admin";
+		return '/'.$this->getUserData('orgCode')."/admin/";
 	}
 	
 	public function _updateCookie($cookies)

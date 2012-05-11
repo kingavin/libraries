@@ -5,6 +5,7 @@ class Class_Server
 	
 	protected static $_config = null;
 	protected static $_enviroment = 'production';
+	protected static $_orgCode = null;
 	
 	public static function config()
 	{
@@ -26,6 +27,24 @@ class Class_Server
 			return "http://lib.eo.test/form";
 		} else {
 			return "http://tempst.enorange.com";
+		}
+	}
+	
+	public static function getOrgCode()
+	{
+		if(is_null(self::$_orgCode)) {
+			$pathPieces = explode('/', $_SERVER["REQUEST_URI"]);
+			self::$_orgCode = $pathPieces[3];
+		}
+		return self::$_orgCode;
+	}
+	
+	public static function getMongoServer()
+	{
+		if(self::$_enviroment == 'production') {
+			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
+		} else {
+			return '127.0.0.1';
 		}
 	}
 }

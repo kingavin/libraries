@@ -110,7 +110,7 @@ class Class_Server
 	public static function getMongoServer()
 	{
 		if(self::$_enviroment == 'production') {
-			return 'mongodb://craftgavin:whothirstformagic?@58.51.194.8';
+			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
 		} else {
 			return '127.0.0.1';
 		}
