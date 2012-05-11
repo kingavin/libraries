@@ -1,7 +1,7 @@
 <?php
 class Class_Server
 {
-	const API_KEY = '21F%guioga<LL;9y923t715hi4*&^*(%&guo32iofgdsz8ohj0phgyUIFMU*(T^!&F';
+	const API_KEY = '21F%guiogaLL;9y923t715hi4*&^*(%&guo32iofgdsz8ohj0phgyUIFMU*(T^!&F';
 	
 	protected static $_config = null;
 	protected static $_enviroment = 'production';

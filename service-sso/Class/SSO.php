@@ -4,7 +4,7 @@ class Class_SSO
 	const SERVICE_FILE_KEY = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 	const SERVICE_CMS_KEY = 'zvmiopav7BbuifbahoUifbqov541huog5vua4ofaweafeq98fvvxreqh';
 	const SERVICE_PM_KEY = 'fiewayzgv7z9g784b3o549830yf7gvapojr9021yhb43iuhor78fgv';
-	const SERVICE_FORM_KEY = '21F%guioga<LL;9y923t715hi4*&^*(%&guo32iofgdsz8ohj0phgyUIFMU*(T^!&F';
+	const SERVICE_FORM_KEY = '21F%guiogaLL;9y923t715hi4*&^*(%&guo32iofgdsz8ohj0phgyUIFMU*(T^!&F';
 	
 	public function validateLoginUrl($consumer, $ret, $timeStamp, $token, $sig)
 	{
