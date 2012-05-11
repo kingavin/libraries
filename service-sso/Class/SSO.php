@@ -29,7 +29,7 @@ class Class_SSO
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_FORM_KEY);
 				break;
 			case 'service-forum':
-				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_FORM_KEY);
+				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_FORUM_KEY);
 				break;
 		}
 		
