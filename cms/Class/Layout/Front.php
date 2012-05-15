@@ -117,6 +117,7 @@ class Class_Layout_Front
 //			}
 			
 			$moduleName = $this->_request->getModuleName();
+			$selector = $layoutTable->select();
 			switch($moduleName) {
 				case 'default':
 				case '':
