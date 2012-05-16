@@ -103,9 +103,12 @@ class Class_Session_User extends App_Session_SsoUser
 		if(!$this->isLogin()) {
 			return false;
 		}
+		$request = Zend_Controller_Front::getInstance()->getRequest();
 		
-		if($this->getUserData('userType') != 'enorange-admin') {
+		if($request->getModuleName() == 'admin' && $this->getUserData('userType') != 'enorange-admin') {
 			return false;
+		} else if($request->getModuleName() == 'user' && $request->getParam('userId') != Class_Session_User::getInstance()->getUserId()) {
+			return false;	
 		}
 		return true;
 	}
@@ -129,7 +132,7 @@ class Class_Session_User extends App_Session_SsoUser
 	
 	public function getHomeLocation()
 	{
-		return "/";
+		return '/'.$this->getUserId()."/user";
 	}
 	
 	public function _updateCookie($cookies)
