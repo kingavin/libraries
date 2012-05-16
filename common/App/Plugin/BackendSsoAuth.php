@@ -3,7 +3,7 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 {
 	const CMS = 'cms';
 	const PM = 'pm';
-	const SERVICE_SSO = 'service-sso';
+	const SERVICE_ACCOUNT = 'service-account';
 	const SERVICE_FILE = 'service-file';
 	const SERVICE_FORM = 'service-form';
 	const SERVICE_FORUM = 'service-forum';

@@ -34,7 +34,11 @@ class Class_Server
 	{
 		if(is_null(self::$_orgCode)) {
 			$pathPieces = explode('/', $_SERVER["REQUEST_URI"]);
-			self::$_orgCode = $pathPieces[3];
+			if(strpos($_SERVER["REQUEST_URI"], 'http:') !== false) {
+				self::$_orgCode = $pathPieces[3];
+			} else {
+				self::$_orgCode = $pathPieces[1];
+			}
 		}
 		return self::$_orgCode;
 	}

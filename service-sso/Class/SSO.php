@@ -3,7 +3,7 @@ class Class_SSO
 {
 	const SERVICE_CMS_KEY = 'zvmiopav7BbuifbahoUifbqov541huog5vua4ofaweafeq98fvvxreqh';
 	const SERVICE_PM_KEY = 'fiewayzgv7z9g784b3o549830yf7gvapojr9021yhb43iuhor78fgv';
-	const SERVICE_SSO_KEY = 'nfieawfueau86572hhuiGYU615hf678tRcewq7uh43qffugUIGIfefwg';
+	const SERVICE_ACCOUNT_KEY = 'nfieawfueau86572hhuiGYU615hf678tRcewq7uh43qffugUIGIfefwg';
 	const SERVICE_FILE_KEY = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 	const SERVICE_FORM_KEY = '21FguiogaLL9y923t715hi4guo32iofgdsz8ohj0phgyUIFMUubNUh78rF';
 	const SERVICE_FORUM_KEY = 'fbewabosbvdu09yb67f868r3bu2btp9hv8sa9vgugqabnuiobUIbbfiepbu43';
@@ -23,8 +23,8 @@ class Class_SSO
 			case 'pm':
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_PM_KEY);
 				break;
-			case 'service-sso':
-				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_SSO_KEY);
+			case 'service-account':
+				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_ACCOUNT_KEY);
 				break;
 			case 'service-file':
 				$sigGenerated = md5($consumer.$ret.$timeStamp.$token.self::SERVICE_FILE_KEY);
