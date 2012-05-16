@@ -3,6 +3,7 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 {
 	const CMS = 'cms';
 	const PM = 'pm';
+	const SERVICE_SSO = 'service-sso';
 	const SERVICE_FILE = 'service-file';
 	const SERVICE_FORM = 'service-form';
 	const SERVICE_FORUM = 'service-forum';
@@ -10,18 +11,21 @@ class App_Plugin_BackendSsoAuth extends Zend_Controller_Plugin_Abstract
 	protected $_assu;
 	protected $_serviceType;
 	protected $_apiKey;
+	protected $_authModuleArr;
 	
-	public function __construct(App_Session_SsoUser $assu, $serviceType, $apiKey)
+	public function __construct(App_Session_SsoUser $assu, $serviceType, $apiKey, $authModuleArr = array('admin', 'rest'))
 	{
 		$this->_assu = $assu;
 		$this->_serviceType = $serviceType;
 		$this->_apiKey = $apiKey;
+		$this->_authModuleArr = $authModuleArr;
 	}
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
 		$csu = $this->_assu;
-		if($request->getModuleName() == 'admin' || $request->getModuleName() == 'rest') {
+		$moduleName = $request->getModuleName();
+		if(in_array($moduleName, $this->_authModuleArr)) {
 			if(!$csu->isLogin()) {
 				if(strpos($_SERVER["REQUEST_URI"], 'http://') !== false) {
 					$retUrl = $_SERVER["REQUEST_URI"];

@@ -1,6 +1,8 @@
 <?php
 class Class_Server
 {
+	const API_KEY = 'nfieawfueau86572hhuiGYU615hf678tRcewq7uh43qffugUIGIfefwg';
+	
 	protected static $_config = null;
 	protected static $_enviroment = 'production';
 	protected static $_libVersion = 'v1';
