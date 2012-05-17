@@ -3,8 +3,8 @@ class Class_Session_User extends App_Session_SsoUser
 {
 	private static $_instance = null;
 
-	private static $_md5salt = '^;1[djw#1&';
-	private static $_md5salt2 = 'cH)b3u(7689)(*';
+	private static $_md5salt = 'fie&4Jgoaaq1d#$@(lj21';
+	private static $_md5salt2 = '6234GY69)+3jo108';
 
 	private $_isLogin = null;
 	private $_hasPrivilege = false;
@@ -23,6 +23,12 @@ class Class_Session_User extends App_Session_SsoUser
 	{
 		return md5($userData.self::$_md5salt.$userId.self::$_md5salt2.$startTimeStamp);
 	}
+	
+	public static function encryptPassword($input)
+    {
+    	return $input;
+    	return md5($input.self::$_md5salt);
+    }
 	
 	public function hasSSOToken()
 	{

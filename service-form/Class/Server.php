@@ -17,7 +17,7 @@ class Class_Server
 		if(self::$_enviroment == 'development') {
 			return "http://lib.eo.test/ext";
 		} else {
-			return "http://tempst.enorange.com";
+			return "http://st.onlinefu.com/ext";
 		}
 	}
 	
@@ -26,7 +26,7 @@ class Class_Server
 		if(self::$_enviroment == 'development') {
 			return "http://lib.eo.test/form";
 		} else {
-			return "http://tempst.enorange.com";
+			return "http://st.onlinefu.com/form";
 		}
 	}
 	
