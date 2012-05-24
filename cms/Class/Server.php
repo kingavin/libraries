@@ -95,6 +95,11 @@ class Class_Server
 		return $url;
 	}
 	
+	public static function fileUrl()
+	{
+		return 'http://storage.aliyun.com/public-misc/'.self::$_orgCode;
+	}
+	
 	public static function getFileServer()
 	{
 		if(self::$_enviroment == 'production') {
