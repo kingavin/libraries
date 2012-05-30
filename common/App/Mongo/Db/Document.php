@@ -105,6 +105,9 @@ abstract class App_Mongo_Db_Document
 	
 	public function setProperty($property, $value)
 	{
+		if($property == 'id') {
+			return false;
+		}
 		if (substr($property, 0, 1) == '_') {
 			throw new Exception("Can not set private property '$property'");
 		}

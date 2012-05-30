@@ -34,22 +34,24 @@ class Class_Session_User
 
 	public function register($loginName, $password)
 	{
-		$user = null;
 		if(!is_null($loginName) && !is_null($password)) {
 			$userCo = App_Factory::_m('User');
-			$userDoc = $userCo->fetchOne(array('loginName' => $loginName));
+			$userDoc = $userCo->addFilter('loginName', $loginName)->
+				fetchOne();
 			
 			if(!empty($userDoc)) {
-				throw new Exception('loginName entry duplicated');
+				return false;
 			}
 			
 			$userDoc = $userCo->create();
 			$userDoc->loginName = $loginName;
 			$userDoc->password = self::getMd5Password($password);
+			$userDoc->created = date('Y-m-d H:i', time());
+			$userDoc->status = 'active';
 			$userDoc->save();
 			$this->login($userDoc);
 		}
-		return true;
+		return $userDoc;
 	}
 
 	public function login($post)

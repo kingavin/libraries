@@ -27,7 +27,7 @@ class Class_Form_Validator_Mongo_NoRecordExists extends Zend_Validate_Abstract
 
 //        $result = $this->_query($value);
         
-        $result = $co->fetchOne(array($this->_field => $value));
+        $result = $co->addFilter($this->_field, $value)->fetchOne();
         
         
         if ($result) {

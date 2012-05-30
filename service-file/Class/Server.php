@@ -95,7 +95,14 @@ class Class_Server
 	public static function getOrgCode()
 	{
 		$controller = Zend_Controller_Front::getInstance();
-		$orgCode = $controller->getRequest()->getParam('orgCode');
+		$request = $controller->getRequest();
+		
+		if($request->isXmlHttpRequest()) {
+			$orgCode = $request->getHeader('X-Org-Code');
+		} else {
+			$orgCode = $request->getParam('orgCode');
+		}
+		
 		return $orgCode;
 	}
 	
