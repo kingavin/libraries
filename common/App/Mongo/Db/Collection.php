@@ -235,7 +235,7 @@ abstract class App_Mongo_Db_Collection
 		return $this;
 	}
 	
-	public function sort($key, $value)
+	public function sort($key, $value = 1)
 	{
 		$this->_sort[$key] = $value;
 		return $this;
