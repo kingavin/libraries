@@ -16,6 +16,7 @@ class App_Mongo_Attributeset_Doc extends App_Mongo_Db_Document
 	{
 		if(is_null($this->_attributeDocs)) {
 			$this->_attributeDocs = App_Factory::_am('Attribute')
+				->sort('sort', 1)
 				->addFilter('attributesetId', $this->getId())
 				->fetchDoc();
 		}
@@ -37,38 +38,63 @@ class App_Mongo_Attributeset_Doc extends App_Mongo_Db_Document
 				switch($aDoc->type) {
 					case 'text':
 						$el = new Zend_Form_Element_Text('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label
+							'label' => $aDoc->label,
+							'Description' => $aDoc->description
 						));
 						break;
 					case 'radio':
 						$el = new Zend_Form_Element_Radio('attr_'.$aDoc->getId(), array(
 							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr
+							'multiOptions' => $optionsArr,
+							'Description' => $aDoc->description
 						));
 						break;
 					case 'select':
 						$el = new Zend_Form_Element_Select('attr_'.$aDoc->getId(), array(
 							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr
+							'multiOptions' => $optionsArr,
+							'Description' => $aDoc->description
 						));
 						break;
 					case 'multicheckbox':
 						$el = new Zend_Form_Element_MultiCheckbox('attr_'.$aDoc->getId(), array(
 							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr
+							'multiOptions' => $optionsArr,
+							'Description' => $aDoc->description
 						));
 						break;
 					case 'textarea':
 						$el = new Zend_Form_Element_Textarea('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label
+							'label' => $aDoc->label,
+							'Description' => $aDoc->description
 						));
 						break;
 					case 'button':
 						$el = new Zend_Form_Element_Button('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label
+							'label' => $aDoc->label,
+							'Description' => $aDoc->description
+						));
+						break;
+					case 'label':
+						$el = new App_Form_Element_Note('attr_'.$aDoc->getId(), array(
+							'label' => $aDoc->label,
+							'Description' => $aDoc->description
 						));
 						break;
 				}
+				
+				if(!is_null($aDoc->className)) {
+					$el->class = $aDoc->className;
+				}
+				$labelDecorator = new App_Form_Decorator_Label();
+				$el->setDecorators(array(
+			        array('ViewHelper'),
+			        array('Errors'),
+			        array('Description', array('tag' => 'p', 'class' => 'description')),
+			        array('HtmlTag', array('tag' => 'dd', 'class' => $aDoc->className)),
+			        $labelDecorator
+			    ));
+				
 				$elList[] = $el;
 			}
 			

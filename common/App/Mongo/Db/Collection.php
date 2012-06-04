@@ -203,11 +203,11 @@ abstract class App_Mongo_Db_Collection
 	
 	public function addFilter($key, $val, $type = 'and')
 	{
-		if(is_array($val)) {
-			$this->_filters[$key] = array('$in' => $val);
-		} else {
+//		if(is_array($val)) {
+//			$this->_filters[$key] = array('$in' => $val);
+//		} else {
 			$this->_filters[$key] = $val;
-		}
+//		}
 		return $this;
 	}
 	
