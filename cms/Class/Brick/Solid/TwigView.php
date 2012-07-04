@@ -22,7 +22,6 @@ class Class_Brick_Solid_TwigView implements Zend_View_Interface
     
     protected $_extName = null;
     protected $_classSuffix = null;
-    protected $_brickId = null;
     /**
      * class constructor
      *
@@ -235,12 +234,6 @@ class Class_Brick_Solid_TwigView implements Zend_View_Interface
     	return $this;
     }
     
-    public function setBrickId($id)
-    {
-    	$this->_brickId = $id;
-    	return $this;
-    }
-    
     protected function _renderGearLinks()
     {
     	$htmlStringArr = array();
@@ -262,7 +255,7 @@ class Class_Brick_Solid_TwigView implements Zend_View_Interface
         $template = $this->_twig->loadTemplate($name);
         $csa = Class_Session_Admin::getInstance();
         if($csa->isLogin()) {
-        	$tHead = '<div class="'.$this->_renderClass().'" brick-id="'.$this->_brickId.'" ext-name="'.$this->_extName.'" gearlinks=\'['.$this->_renderGearLinks().']\'>';
+        	$tHead = '<div class="'.$this->_renderClass().'" brick-id="'.$this->_assigned['brickId'].'" ext-name="'.$this->_extName.'" gearlinks=\'['.$this->_renderGearLinks().']\'>';
 //        	$tHead.= ;
         } else {
         	$tHead = '<div class="'.$this->_renderClass().'">';

@@ -4,17 +4,19 @@ abstract class Class_Brick_Solid_Abstract implements Class_Brick_Interface
     protected $_request = null;
     protected $_brick = null;
     protected $_params = null;
+    protected $_globalParams = null;
     protected $_scriptName = 'view.phtml';
     protected $_disableRender = false;
     protected $_gearLinks = array();
     
     protected $_useTwig = false;
     
-    public function __construct($brick, Zend_Controller_Request_Abstract $request)
+    public function __construct($brick, Zend_Controller_Request_Abstract $request, $globalParams = "{}")
     {
     	$this->_request = $request;
     	$this->_brick = $brick;
-        $this->_params = (object)$brick->params;
+        $this->_params = json_decode($brick->params);
+        $this->_globalParams = json_decode($globalParams);
         
         $this->_init();
     }
@@ -51,6 +53,9 @@ abstract class Class_Brick_Solid_Abstract implements Class_Brick_Interface
     	$params = $this->_params;
     	if(isset($params->$key)) {
     		$temp = $params->$key;
+    		if($params->$key == 'global' && isset($this->_globalParams->$key)) {
+    			$temp = $this->_globalParams->$key;
+    		}
     		return $temp;
     	}
     	return $defaultValue;
@@ -112,7 +117,8 @@ abstract class Class_Brick_Solid_Abstract implements Class_Brick_Interface
     {
     	$this->view = new Class_Brick_Solid_View(
         	array('scriptPath' => CONTAINER_PATH.'/extension'.$this->path()),
-        	$this->_params
+        	$this->_params,
+        	$this->_globalParams
         );
         $this->view->addHelperPath(CONTAINER_PATH.'/extension/brick/helpers', 'Helper');
     	$this->prepare();
@@ -146,8 +152,7 @@ abstract class Class_Brick_Solid_Abstract implements Class_Brick_Interface
 		} else if($this->_disableRender == 'no-resource') {
 			return "<div class='no-resource'>暂无内容</div>";
 		} else {
-			$this->view->setBrickId($this->_brick->getId())
-				->setExtName($this->_brick->extName)
+			$this->view->setExtName($this->_brick->extName)
 				->setClassSuffix($this->_brick->cssSuffix);
 			
 			$this->view->brickName = $this->_brick->brickName;

@@ -40,8 +40,8 @@ class Class_Brick_Controller
     	if($brick instanceof Class_Model_Brick_Row) {
     		
     	} else if(is_string($brick)) {
-    		$co = App_Factory::_m('Brick');
-			$brickRow = $co->create();
+    		$brickTb = Class_Base::_('Brick');
+			$brickRow = $brickTb->createRow();
 			$brickRow->setFromArray(array('extName' => $brick));
 			$solidBrick = $brickRow->createSolidBrick($request);
 		    return $solidBrick;
@@ -49,7 +49,7 @@ class Class_Brick_Controller
     }
     
     public function registerBrick(
-        $brick,
+        Class_Model_Brick_Row $brick,
         Zend_Controller_Request_Abstract $request)
     {
         $solidBrick = $brick->createSolidBrick($request);
@@ -116,7 +116,6 @@ class Class_Brick_Controller
 	public function renderAll()
 	{
 		$solidBrickList = $this->_solidBrickList;
-		
 		$HTML_ARR = array();
 		foreach($solidBrickList as $solidBrick) {
 			if(array_key_exists($solidBrick->getSpriteName(), $HTML_ARR)) {

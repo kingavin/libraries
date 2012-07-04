@@ -21,11 +21,6 @@ class Class_Server
 		self::$_siteFolder = $siteFolder;
 	}
 	
-	public static function setLibVersion($ver)
-	{
-		self::$_libVersion = $ver;
-	}
-	
 	public static function getImageUrl()
 	{
 		return 'http://storage.aliyun.com/public-misc';
@@ -93,9 +88,9 @@ class Class_Server
 //		$url.= self::name('lib');
 //		$url.= '/cms/'.self::$_libVersion;
 		if(self::$_enviroment == 'production') {
-			$url = "http://st.onlinefu.com/cms/".self::$_libVersion;
+			$url = "http://st.onlinefu.com/cms/v1";
 		} else {
-			$url = "http://lib.eo.test/cms/".self::$_libVersion;
+			$url = "http://lib.eo.test/cms/v1";
 		}
 		return $url;
 	}
