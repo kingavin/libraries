@@ -8,7 +8,7 @@ class App_Mongo_Entity_Doc extends App_Mongo_Db_Document
 		$this->_attributesetDoc = $ac;
 	}
 	
-	public function save($save)
+	public function save($safe = true)
 	{
 		if(!is_null($this->_attributesetDoc)) {
 			$entityValue = array();

@@ -123,7 +123,7 @@ abstract class App_Mongo_Db_Collection
 		return $cursor;
 	}
 	
-	public function fetchArr($convertId = false)
+	public function fetchArr($field = null)
 	{
 		$cursor = $this->getCollection()->find($this->_filters, $this->_fields);
 		
@@ -136,16 +136,18 @@ abstract class App_Mongo_Db_Collection
 			$cursor->sort($this->_sort);
 		}
 		
-		if($convertId) {
+		if(is_null($field)) {
 			$data = array();
 			foreach($cursor as $id => $row) {
-				$row['id'] = $id;
-				unset($row['_id']);
-				$data[] = $row;
+				$data[$id] = $row;
 			}
-			return $data;
+		} else {
+			$data = array();
+			foreach($cursor as $id => $row) {
+				$data[$id] = $row[$field];
+			}
 		}
-		return $cursor;
+		return $data;
 	}
 	
 	public function fetchDoc()

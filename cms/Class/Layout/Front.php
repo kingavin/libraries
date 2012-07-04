@@ -76,6 +76,11 @@ class Class_Layout_Front
 		return $this->_actionName;
 	}
 	
+	public function getCurrentModuleName()
+	{
+		return $this->_request->getModuleName();
+	}
+	
 	public function setPageAlias($pageAlias)
 	{
 		$this->_pageAlias = $pageAlias;
@@ -95,8 +100,13 @@ class Class_Layout_Front
 	
 	public function getLayoutRow()
 	{
+		$moduleName = $this->_request->getModuleName();
+		if($moduleName == 'admin' || $moduleName == 'rest') {
+			return null;
+		}
 		if($this->_layoutRow == null) {
-			$layoutTable = Class_Base::_('Layout');
+//			$layoutTable = Class_Base::_('Layout');
+			$layoutCo = App_Factory::_m('Layout');
 			$layoutRow = null;
 			
 //			if(empty($this->_actionName)) {
@@ -116,32 +126,75 @@ class Class_Layout_Front
 //				}
 //			}
 			
-			$moduleName = $this->_request->getModuleName();
-			$selector = $layoutTable->select();
+			
+			$controllerName = $this->getCurrentControllerName();
+//			$selector = $layoutTable->select();
+
 			switch($moduleName) {
 				case 'default':
 				case '':
-					$selector = $layoutTable->select()->where('controllerName = ?', $this->getCurrentControllerName())
-						->where('moduleName = ?', 'default');
+//					$selector = $layoutTable->select()->where('controllerName = ?', $this->getCurrentControllerName())
+//						->where('moduleName = ?', 'default');
+					$layoutDoc = $layoutCo->addFilter('controllerName', $this->getCurrentControllerName())
+						->fetchOne();
+						
+					if(is_null($layoutDoc) && in_array($controllerName, array('index','article','list','product','product-list'))) {
+						$layoutDoc = $layoutCo->create();
+						$layoutDoc->controllerName = $this->getCurrentControllerName();
+						$layoutDoc->moduleName = 'default';
+						$layoutDoc->isDisplayHead = 1;
+						$layoutDoc->default = 1;
+						$layoutDoc->type = $controllerName;
+						$layoutDoc->save();
+					}
 					break;
 				case 'user':
-					$selector = $layoutTable->select()->where('moduleName = ?', 'user');
+					$layoutDoc = $layoutCo->addFilter('moduleName', 'user')
+						->fetchOne();
+					if(is_null($layoutDoc)) {
+						$layoutDoc = $layoutCo->create();
+						$layoutDoc->moduleName = 'user';
+						$layoutDoc->controllerName = 'index';
+						$layoutDoc->isDisplayHead = 1;
+						$layoutDoc->default = 1;
+						$layoutDoc->type = 'user';
+						$layoutDoc->save();
+					}
 					break;
 				case 'shop':
-					$selector = $layoutTable->select()->where('controllerName = ?', $this->getCurrentControllerName())
-						->where('moduleName = ?', 'shop');
+					$layoutDoc = $layoutCo->addFilter('moduleName', 'shop')
+						->addFilter('controllerName', $controllerName)
+						->fetchOne();
+					if(is_null($layoutDoc)) {
+						if(in_array($controllerName, array('index', 'order', 'payment-gateway'))) {
+							$layoutDoc = $layoutCo->create();
+							$layoutDoc->moduleName = 'user';
+							$layoutDoc->controllerName = $controllerName;
+							$layoutDoc->isDisplayHead = 1;
+							$layoutDoc->default = 1;
+							$layoutDoc->type = 'user';
+							$layoutDoc->save();
+						}
+					}
 					break;
 			}
 			
-			$layoutRow = $layoutTable->fetchRow($selector);
-			$this->_layoutRow = $layoutRow;
+//			$layoutRow = $layoutTable->fetchRow($selector);
+			$this->_layoutRow = $layoutDoc;
+		}
+		if(is_null($this->_layoutRow)) {
+			throw new Exception("layout settings not found with given layoutName");
 		}
 		return $this->_layoutRow;
 	}
 	
 	public function getResource()
 	{
-		if(is_null($this->_resource)) {
+		$module = $this->_request->getModuleName();
+		if(is_null($this->_resource) && $module == 'default') {
+			$controllerName = $this->getCurrentControllerName();
+			$actionName = $this->getCurrentActionName();
+			
 			$layoutRow = $this->getLayoutRow();
 			if(is_null($layoutRow)) {
 				return null;
@@ -151,11 +204,12 @@ class Class_Layout_Front
 				return $this->_resource;
 			}
 			
-			$id = $this->getCurrentActionName();
+			$id = $actionName;
 			$dbType = 'mysql';
 			switch($layoutRow->type) {
 				case 'article':
-					$tb = Class_Base::_('Artical');
+					$dbType = 'mongo';
+					$co = App_Factory::_m('Article');
 					break;
 				case 'list':
 					$tb = Class_Base::_('GroupV2');
@@ -167,6 +221,11 @@ class Class_Layout_Front
 				case 'product-list':
 					$tb = Class_Base::_('GroupV2');
 					break;
+				case 'book':
+					$dbType = 'mongo';
+					$co = App_Factory::_m('Book');
+					break;
+					break;
 			}
 			
 			if($layoutRow->default == 1) {
@@ -176,23 +235,28 @@ class Class_Layout_Front
 					$this->_resource = $co->find($id);
 				}
 			} else {
-				$controllerName = $this->getCurrentControllerName();
-				$actionName = $this->getCurrentActionName();
+				
 				if($layoutRow->type == 'article') {
-					$selector = $tb->select()->where('alias = ?', '/'.$controllerName.'/'.$actionName.'.shtml');
+					$articleDoc = $co->addFilter('link', '/'.$controllerName.'/'.$actionName.'.shtml')
+						->fetchOne(); //$tb->select()->where('link = ?', '/'.$controllerName.'/'.$actionName.'.shtml');
+					$this->_resource = $articleDoc;
 				} else if($layoutRow->type == 'list') {
-					$selector = $tb->select()->where('alias = ?', '/'.$controllerName.'.shtml');
-					if(empty($actionName)) {
-						$page = 1;
-					} else {
-						$page = substr($actionName, 4);
-					}
-					
-					$this->_request->setParam('page', $page);
+//					$selector = $tb->select()->where('alias = ?', '/'.$controllerName.'.shtml');
+//					if(empty($actionName)) {
+//						$page = 1;
+//					} else {
+//						$page = substr($actionName, 4);
+//					}
+//					
+//					$this->_request->setParam('page', $page);
+//					$this->_resource = $tb->fetchRow($selector);
+				} else if($layoutRow->type == 'book') {
+					$bookDoc = $co->addFilter('name', $controllerName)
+						->fetchOne();
+					$this->_resource = $bookDoc;
 				}
-				$this->_resource = $tb->fetchRow($selector);
 			}
-			if($this->_resource == null && $id == 'index') {
+			if($this->_resource == null && $actionName == 'index') {
 				$this->_resource = 'none';
 			}
 		}

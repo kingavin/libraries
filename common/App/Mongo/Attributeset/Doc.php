@@ -82,6 +82,9 @@ class App_Mongo_Attributeset_Doc extends App_Mongo_Db_Document
 						));
 						break;
 				}
+				foreach($aDoc->$proving as $k => $v) {
+					$el->addValidator(new Validator('fefac'));
+				}
 				
 				if(!is_null($aDoc->className)) {
 					$el->class = $aDoc->className;
