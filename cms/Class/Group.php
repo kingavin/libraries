@@ -1,6 +1,12 @@
 <?php
-//class Class_Group
-//{
+class Class_Group
+{
+	
+	
+	
+	
+	
+	
 //    public static function getGroup($activeOnly = true)
 //    {
 //        $groupSelector = Class_Base::_('Group');
@@ -15,4 +21,4 @@
 //        }
 //        $tree = new Class_Tree($treeArr, $ccData);
 //    }
-//}
+}

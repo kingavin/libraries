@@ -1,4 +1,4 @@
-<?
+<?php
 class Class_Acl extends Zend_Acl
 {
 	protected static $_acl = null;

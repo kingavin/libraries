@@ -5,6 +5,7 @@ abstract class App_Mongo_Db_Document
 	protected $_data = array();
 	protected $_cleanData = array();
 	protected $_collection = null;
+	protected $_field = array();
 	
 	protected $_operations = array();
 	
@@ -87,6 +88,10 @@ abstract class App_Mongo_Db_Document
 	
 	public function getId()
 	{
+		//new object that does not have an id;
+		if(is_null($this->_id)) {
+			return null;
+		}
 		return $this->_id->{'$id'};
 	}
 	
@@ -132,9 +137,19 @@ abstract class App_Mongo_Db_Document
 		return false;
 	}
 	
+	public function setFromArray($array)
+	{
+		foreach($array as $key => $val) {
+			if(in_array($key, $this->_field)) {
+				$this->setProperty($key, $val);
+			}
+		}
+		return $this;
+	}
+	
 	public function isNewDocument()
 	{
-		return empty($this->_cleanData);
+		return empty($this->_cleanData) && is_null($this->getId());
 	}
 	
 	public function export()
@@ -252,17 +267,17 @@ abstract class App_Mongo_Db_Document
 		return $result;
 	}
 	
-	public function setFromArray($array)
-	{
-		foreach($array as $property => $value) {
-			if($property == '_id' && $value instanceof MongoId) {
-				$this->_id = $value;
-			} else {
-				$this->setProperty($property, $value);
-			}
-		}
-		return $this;
-	}
+//	public function setFromArray($array)
+//	{
+//		foreach($array as $property => $value) {
+//			if($property == '_id' && $value instanceof MongoId) {
+//				$this->_id = $value;
+//			} else {
+//				$this->setProperty($property, $value);
+//			}
+//		}
+//		return $this;
+//	}
 	
 	public function getData()
 	{
