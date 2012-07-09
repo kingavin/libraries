@@ -242,4 +242,10 @@ abstract class App_Mongo_Db_Collection
 		$this->_sort[$key] = $value;
 		return $this;
 	}
+	
+	public function addSort($key, $value = 1)
+	{
+		$this->_sort[$key] = $value;
+		return $this;
+	}
 }
