@@ -64,7 +64,7 @@ class Class_Mongo_Storage_Doc extends App_Mongo_Db_Document
 		$this->save();
 	}
 	
-	public function recalculateCapacity($file)
+	public function recalculateCapacity($file,$orgCode)
 	{
 		$recalculate['sizeCount'] = 0;
 		$recalculate['imageFileCount'] = 0;
