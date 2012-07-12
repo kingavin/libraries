@@ -141,6 +141,13 @@ abstract class App_Mongo_Db_Collection
 			foreach($cursor as $id => $row) {
 				$data[$id] = $row;
 			}
+		} else if($field === false) {
+			$data = array();
+			foreach($cursor as $id => $row) {
+				$row['id'] = $id;
+				unset($row['_id']);
+				$data[] = $row;
+			}
 		} else {
 			$data = array();
 			foreach($cursor as $id => $row) {
