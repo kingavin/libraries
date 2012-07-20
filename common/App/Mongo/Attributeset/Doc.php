@@ -1,18 +1,14 @@
 <?php
 class App_Mongo_Attributeset_Doc extends App_Mongo_Db_Document
 {
+	protected $_field = array(
+		'label',
+		'type'
+	);
+	protected $_zfElements = null;
 	protected $_attributeDocs = null;
 	
-	public function getAttributeDoc($id)
-	{
-		foreach($this->_attributeDocs as $ad) {
-			if($ad->getId() == $id) {
-				return $ad;
-			}
-		}
-	}
-	
-	public function getElementList($zfFormElement = true)
+	public function _loadAttributeDoc()
 	{
 		if(is_null($this->_attributeDocs)) {
 			$this->_attributeDocs = App_Factory::_am('Attribute')
@@ -20,88 +16,81 @@ class App_Mongo_Attributeset_Doc extends App_Mongo_Db_Document
 				->addFilter('attributesetId', $this->getId())
 				->fetchDoc();
 		}
-		$attributeDocs = $this->_attributeDocs;
-		
-		if(!$zfFormElement) {
-//			return $this->attributeList;
-		} else {
-			$elList = array();
-			
-			foreach($attributeDocs as $aDoc) {
-				$el = null;
-				$options = $aDoc->options;
-				
-				$optionsArr = array();
-				foreach($options as $op) {
-					$optionsArr[$op['label']] = $op['label'];
+		return;
+	}
+	
+	public function getAttributeDoc($id = null)
+	{
+		$this->_loadAttributeDoc();
+		if(!is_null($id)) {
+			foreach($this->_attributeDocs as $ad) {
+				if($ad->getId() == $id) {
+					return $ad;
 				}
-				switch($aDoc->type) {
-					case 'text':
-						$el = new Zend_Form_Element_Text('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'Description' => $aDoc->description
+			}
+		} else {
+			return $this->_attributeDocs;
+		}
+	}
+	
+	public function loadZfElements()
+	{
+		$this->_loadAttributeDoc();
+		$attributeArr = $this->_attributeDocs;
+		
+		if(count($attributeArr) == 0) {
+			$this->_zfElements = array();
+			return;
+		}
+		
+		foreach($attributeArr as $attr) {
+			$attrId = $attr->getId();
+			$type = $attr->type;
+			$label = $attr->label;
+			
+			$element = null;
+			$frontendModelName = null;
+			if($frontendModelName != null) {
+				$frontModel = Class_Core::_($frontendModelName, $this, $entity);
+				$element = $frontModel->toElement();
+			} else {
+				$selectedValue = '';
+				 
+				switch($type) {
+					case 'textarea':
+						$element = new Zend_Form_Element_Textarea('attribute_'.$attrId, array(
+	                        'label' => $label,
+	                        'value' => $selectedValue
 						));
 						break;
-					case 'radio':
-						$el = new Zend_Form_Element_Radio('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr,
-							'Description' => $aDoc->description
+					case 'text':
+						$element = new Zend_Form_Element_Text('attribute_'.$attrId, array(
+	                        'label' => $label,
+	                        'value' => $selectedValue
 						));
 						break;
 					case 'select':
-						$el = new Zend_Form_Element_Select('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr,
-							'Description' => $aDoc->description
+						$element = new Zend_Form_Element_Select('attribute_'.$attrId, array(
+	                        'label' => $label,
+	                        'value' => $selectedValue
 						));
 						break;
-					case 'multicheckbox':
-						$el = new Zend_Form_Element_MultiCheckbox('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'multiOptions' => $optionsArr,
-							'Description' => $aDoc->description
-						));
-						break;
-					case 'textarea':
-						$el = new Zend_Form_Element_Textarea('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'Description' => $aDoc->description
-						));
-						break;
-					case 'button':
-						$el = new Zend_Form_Element_Button('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'Description' => $aDoc->description
-						));
-						break;
-					case 'label':
-						$el = new App_Form_Element_Note('attr_'.$aDoc->getId(), array(
-							'label' => $aDoc->label,
-							'Description' => $aDoc->description
-						));
+					default:
+						$element = null;
 						break;
 				}
-				foreach($aDoc->$proving as $k => $v) {
-					$el->addValidator(new Validator('fefac'));
-				}
-				
-				if(!is_null($aDoc->className)) {
-					$el->class = $aDoc->className;
-				}
-				$labelDecorator = new App_Form_Decorator_Label();
-				$el->setDecorators(array(
-			        array('ViewHelper'),
-			        array('Errors'),
-			        array('Description', array('tag' => 'p', 'class' => 'description')),
-			        array('HtmlTag', array('tag' => 'dd', 'class' => $aDoc->className)),
-			        $labelDecorator
-			    ));
-				
-				$elList[] = $el;
+				$this->_zfElements[] = $element;
+
 			}
-			
-			return $elList;
 		}
+	}
+	
+	public function getZfElements()
+	{
+		if($this->_zfElements == null) {
+			$this->loadZfElements();
+		}
+		
+        return $this->_zfElements;
 	}
 }

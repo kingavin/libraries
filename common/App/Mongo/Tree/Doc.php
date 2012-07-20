@@ -98,6 +98,7 @@ abstract class App_Mongo_Tree_Doc extends App_Mongo_Db_Document
     public function getLevelOneTree($leafId)
     {
     	$trail = $this->getTrail($leafId);
+    	
     	$levelOneBranchId = $trail[1]['id'];
     	
     	$index = $this->_getIndex();
