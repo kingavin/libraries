@@ -43,11 +43,10 @@ class App_Mongo_Tree_Leaf_Doc extends App_Mongo_Db_Document
     public function buildArr(&$arr)
     {
     	foreach($this->_children as $c) {
-    		$tempArr = array(
-    			'id' => $c->getId(),
-    			'label' => $c->label,
-    			'link' => $c->link
-    		);
+    		$tempArr = $c->getData();
+    		unset($tempArr['sort']);
+    		unset($tempArr['parentId']);
+    		$tempArr['id'] = $c->getId();
     		if($c->_hasChildren) {
     			$tempChildrenArr = array();
     			$c->buildArr($tempChildrenArr);

@@ -113,6 +113,10 @@ abstract class App_Mongo_Tree_Doc extends App_Mongo_Db_Document
 	{
 		$index = $this->_getIndex();
 		
+		if(is_null($index)) {
+			$index = array();
+		}
+		
 		$multioptions = array();
 		foreach($index as $indexChild) {
 			$this->_getChildrenAsMultiOptions($htmlField, $indexChild, $multioptions, '');
