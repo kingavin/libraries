@@ -18,7 +18,7 @@ class App_Mongo_Tree_Leaf_Doc extends App_Mongo_Db_Document
 	
 	public function sortChildren()
     {
-        $this->_bubbleSort(&$this->_children);
+        $this->_bubbleSort($this->_children);
         return $this;
     }
     
