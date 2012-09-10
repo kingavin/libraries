@@ -104,13 +104,35 @@ class Class_Session_User extends App_Session_SsoUser
 			return false;
 		}
 		
-		if(
-			$this->getUserData('userType') != 'designer' &&
-			($this->getUserData('orgCode') != Class_Server::getOrgCode())
-		) {
-			return false;
+		$zcf = Zend_Controller_Front::getInstance();
+		$routeName = $zcf->getRouter()->getCurrentRouteName();
+		
+		if($routeName == 'admin') {
+			return true;
+		} else if($routeName == 'default' || $routeName == 'rest') {
+			$siteId = Class_Server::getSiteId();
+			$siteDoc = Class_RemoteServer::getSiteDoc($siteId);
+			if(is_null($siteDoc)) {
+				return false;
+			}
+			if($this->getUserData('userType') != 'designer') {
+				if($this->getUserData('orgCode') == $siteDoc->siteId) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+			
+//			if(
+//				$this->getUserData('userType') != 'designer' &&
+//				($this->getUserData('orgCode') != Class_Server::getOrgCode())
+//			) {
+//				return false;
+//			}
 		}
-		return true;
+		return false;
 	}
 	
 	public function getUserId()
@@ -121,10 +143,13 @@ class Class_Session_User extends App_Session_SsoUser
 		return 'nobody';
 	}
 	
-	public function getUserData($key)
+	public function getUserData($key = null)
 	{
 		if($this->isLogin()) {
 			$userData = Zend_Json::decode($_COOKIE['userData']);
+			if(is_null($key)) {
+				return $userData;
+			}
 			return $userData[$key];
 		}
 		return null;
@@ -132,7 +157,7 @@ class Class_Session_User extends App_Session_SsoUser
 	
 	public function getHomeLocation()
 	{
-		return "/".$this->getUserData('orgCode')."/admin/";
+		return "/admin/";
 	}
 	
 //	static public function setOrgCode($orgCode)

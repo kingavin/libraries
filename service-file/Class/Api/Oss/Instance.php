@@ -54,6 +54,18 @@ class Class_Api_Oss_Instance
 		return $result;
 	}
 	
+	public function listObject($bucket, $options)
+	{
+		$result = $this->_alioss->list_object($bucket, $options);
+		return $result;
+	}
+	
+	public function copyObject($from_object, $to_object, $from_bucket = 'public-misc', $to_bucket = 'public-misc')
+	{
+		$result = $this->_alioss->copy_object($from_bucket, $from_object, $to_bucket, $to_object);
+		return $result;
+	}
+	
 	public function getProvider()
 	{
 		return "Alioss";

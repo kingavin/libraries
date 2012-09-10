@@ -8,6 +8,10 @@ class Class_Server
 	protected static $_libVersion = 'v1';
 	protected static $_miscFolder = null;
 	
+	protected static $_siteId = null;
+	protected static $_orgCode = null;
+	protected static $_designerOrgCode = null;
+	
 	public static function config($env, $miscFolder = 'test')
 	{
 		self::$_enviroment = $env;
@@ -92,18 +96,38 @@ class Class_Server
 		return $name;
 	}
 	
+	public static function getSiteId()
+	{
+		if(is_null(self::$_siteId)) {
+			$request = Zend_Controller_Front::getInstance()->getRequest();
+			
+			if($request->isXmlHttpRequest()) {
+				self::$_siteId = $request->getHeader('X-Site-Id');
+			} else {
+				self::$_siteId = $request->getParam('siteId');
+			}
+		}
+		return self::$_siteId;
+	}
+	
+	public static function setOrgCode($orgCode)
+	{
+		self::$_orgCode = $orgCode;
+	}
+	
 	public static function getOrgCode()
 	{
-		$controller = Zend_Controller_Front::getInstance();
-		$request = $controller->getRequest();
-		
-		if($request->isXmlHttpRequest()) {
-			$orgCode = $request->getHeader('X-Org-Code');
-		} else {
-			$orgCode = $request->getParam('orgCode');
-		}
-		
-		return $orgCode;
+		return self::$_orgCode;
+	}
+	
+	public static function setDesignerOrgCode($doc)
+	{
+		self::$_designerOrgCode = $doc;
+	}
+	
+	public static function getDesignerOrgCode()
+	{
+		return self::$_designerOrgCode;
 	}
 	
 	protected static function getConfig()
@@ -119,7 +143,7 @@ class Class_Server
 		if(self::$_enviroment == 'production') {
 			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
 		} else {
-			return '127.0.0.1';
+			return 'mongodb://craftgavin:whothirstformagic?@58.51.194.8';
 		}
 	}
 }

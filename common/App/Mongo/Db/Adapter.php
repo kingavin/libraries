@@ -11,12 +11,7 @@ class App_Mongo_Db_Adapter
 	{
 		$this->_dbName = $dbName;
 		$this->_dbHost = $dbHost;
-	}
-	
-	public function getDbName()
-	{
-		return $this->_dbName;
-	}
+	}	
 	
 	public function getMongo()
 	{
@@ -28,6 +23,11 @@ class App_Mongo_Db_Adapter
 	{
 		$this->_connect();
 		return $this->_db;
+	}
+	
+	public function getDbName()
+	{
+		return $this->_dbName;
 	}
 	
 	public function getCollection($collectionName)
