@@ -107,7 +107,7 @@ class Class_Session_User extends App_Session_SsoUser
 		$zcf = Zend_Controller_Front::getInstance();
 		$routeName = $zcf->getRouter()->getCurrentRouteName();
 		
-		if($routeName == 'admin') {
+		if($routeName == 'info') {
 			return true;
 		} else if($routeName == 'default' || $routeName == 'rest') {
 			$siteId = Class_Server::getSiteId();
@@ -116,7 +116,7 @@ class Class_Session_User extends App_Session_SsoUser
 				return false;
 			}
 			if($this->getUserData('userType') != 'designer') {
-				if($this->getUserData('orgCode') == $siteDoc->siteId) {
+				if($this->getUserData('orgCode') == $siteDoc->orgCode) {
 					return true;
 				} else {
 					return false;
@@ -124,13 +124,6 @@ class Class_Session_User extends App_Session_SsoUser
 			} else {
 				return true;
 			}
-			
-//			if(
-//				$this->getUserData('userType') != 'designer' &&
-//				($this->getUserData('orgCode') != Class_Server::getOrgCode())
-//			) {
-//				return false;
-//			}
 		}
 		return false;
 	}
@@ -157,7 +150,7 @@ class Class_Session_User extends App_Session_SsoUser
 	
 	public function getHomeLocation()
 	{
-		return "/admin/";
+		return "/info/";
 	}
 	
 //	static public function setOrgCode($orgCode)

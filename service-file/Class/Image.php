@@ -10,6 +10,7 @@ class Class_Image
     const BOTTOM = 'bottom';
     
     const FIT_TO_FRAME = 'fitToFrame';
+    const FIT_TO_SIZE = 'fitToSize';
     
     protected $_im = null;
     protected $_imOrigin = null;
@@ -117,57 +118,53 @@ class Class_Image
         return $this;
     }
     
-    public function resize($width = NULL, $height = NULL, $fit = false)
+    public function resize($frameWidth, $frameHeight, $fit)
     {
         if(is_null($this->_imOrigin)) {
             throw new Exception('image file not found');
         }
         
-        if ($width === NULL || $height === NULL) {
-            return $this;
+        if ($frameWidth === NULL || $frameHeight === NULL || $fit === NULL) {
+            throw new Exception('frame width or height or fit not defined!');
         }
         
-        $frameWidth = $width;
-        $frameHeight = $height;
+        $tmpWidth = $frameWidth;
+        $tmpHeight = $frameHeight;
         
-    	if($fit != false) {
-    		switch($fit) {
-    			case 'cropMiddle':
-    				$this->crop($width/$height);
-    				break;
-    			case 'fitToFrame':
-    				$frameProportion = $width/$height;
-    				$origProportion = $this->_origWidth / $this->_origHeight;
-    				if($origProportion > $frameProportion) {
-    					$height = $width / $origProportion;
-    				} else {
-    					$width = $height * $origProportion;
-    				}
-    				
-    				break;
-    		}
-        }
+        $frameProportion = $frameWidth/$frameHeight;
+    	$origProportion = $this->_origWidth / $this->_origHeight;
         
-        $origWidth = imagesx($this->_imOrigin);
-        $origHeight = imagesy($this->_imOrigin);
-
-        $tmpIm = imagecreatetruecolor($width, $height);
-        imagecopyresampled($tmpIm, $this->_imOrigin, 0, 0, 0, 0, $width, $height, $origWidth, $origHeight);
+		switch($fit) {
+    		case 'fitToSize':
+    			if($origProportion > $frameProportion) {
+    				$tmpWidth = $this->_origWidth * ($frameHeight / $this->_origHeight);
+    			} else {
+    				$tmpHeight = $this->_origHeight * ($frameWidth / $this->_origWidth);
+   				}
+   				break;
+  			case 'fitToFrame':
+  				if($origProportion > $frameProportion) {
+					$tmpHeight = $frameWidth / $origProportion;
+				} else {
+					$tmpWidth = $frameHeight * $origProportion;
+				}
+				break;
+		}
         
-        if($fit != false) {
-        	switch($fit) {
-    			case 'cropMiddle':
-    				//$this->crop($width/$height);
-    				break;
-    			case 'fitToFrame':
-    				$finalIm = imagecreatetruecolor($frameWidth, $frameHeight);
-    				imagefill($finalIm, 0, 0, imagecolorallocate($finalIm, 255, 255, 255));
-    				imagecopy($finalIm, $tmpIm, ($frameWidth - $width) / 2, ($frameHeight - $height) / 2, 0, 0, $width, $height);
-    				$tmpIm = $finalIm;
-    				break;
-    		}
-        }
-        $this->_im = $tmpIm;
+        $tmpIm = imagecreatetruecolor($tmpWidth, $tmpHeight);
+        imagecopyresampled($tmpIm, $this->_imOrigin, 0, 0, 0, 0, $tmpWidth, $tmpHeight, $this->_origWidth, $this->_origHeight);
+        $finalIm = imagecreatetruecolor($frameWidth, $frameHeight);
+        
+		switch($fit) {
+			case 'fitToSize':
+				imagecopy($finalIm, $tmpIm, 0, 0, ($tmpWidth - $frameWidth) / 2, ($tmpHeight - $frameHeight) / 2, $frameWidth, $frameHeight);
+				break;
+			case 'fitToFrame':
+				imagefill($finalIm, 0, 0, imagecolorallocate($finalIm, 255, 255, 255));
+				imagecopy($finalIm, $tmpIm, ($frameWidth - $tmpWidth) / 2, ($frameHeight - $tmpHeight) / 2, 0, 0, $tmpWidth, $tmpHeight);
+				break;
+		}
+        $this->_im = $finalIm;
         
         return $this;
     }
