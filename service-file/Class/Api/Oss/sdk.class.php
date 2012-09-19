@@ -5,7 +5,7 @@
 
 
 //设置默认时区
-date_default_timezone_set('Asia/shanghai');
+date_default_timezone_set('Asia/Shanghai');
 
 //检测OSS_API_PATHO是否设置
 if(!defined('OSS_API_PATH'))
