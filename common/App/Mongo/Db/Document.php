@@ -78,7 +78,8 @@ abstract class App_Mongo_Db_Document
 	
 	public function getDb()
 	{
-		
+		$adapter = App_Mongo_Db_Collection::getDefaultAdapter();
+		return $adapter->getDb();
 	}
 	
 	public function getCollection()
@@ -203,11 +204,11 @@ abstract class App_Mongo_Db_Document
 		$this->_data = $data;
 		$this->_cleanData = $data;
 		
-		if ($this->$isNew)
+		if ($isNew) {
 			$this->_postInsert();
-		else
+		} else {
 			$this->_postUpdate();
-		$this->_postSave();
+		}
 		
 		return $result;
 	}

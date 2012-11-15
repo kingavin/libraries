@@ -49,7 +49,7 @@ class Class_Server
 		if(self::$_enviroment == 'production') {
 			return 'mongodb://craftgavin:whothirstformagic?@127.0.0.1';
 		} else {
-			return 'mongodb://craftgavin:whothirstformagic?@58.51.194.8';
+			return '127.0.0.1';
 		}
 	}
 	
