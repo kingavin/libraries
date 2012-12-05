@@ -177,7 +177,7 @@ class App_Service_Aliyun_Storage_Instance
 	{
 
 		$url = "";
-		$url .= 'http://storage.aliyun.com';
+		$url .= 'http://misc.fucms.com';
 		$url .= '/' . $options [self::OSS_BUCKET];
 		if (isset ( $options [self::OSS_OBJECT] ) && '/' !== $options [self::OSS_OBJECT]) {
 			$url .= "/" . str_replace('%2F','/',rawurlencode ( $options [self::OSS_OBJECT] ));
