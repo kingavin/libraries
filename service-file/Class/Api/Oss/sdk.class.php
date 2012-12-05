@@ -68,7 +68,7 @@ class ALIOSS{
 	/**
 	 * 阿里云OSS服务公网地址
 	 */
-	const DEFAULT_OSS_HOST = 'storage.aliyun.com';
+	const DEFAULT_OSS_HOST = 'misc.fucms.com';
 	//const DEFAULT_OSS_HOST = 'oss-test.aliyun-inc.com:8080';
 
 	/**
