@@ -50,14 +50,15 @@ class Class_Session_RemoteUser
 	    		'orgName' => $orgName,
 	        	'loginName' => $loginName
 	        ));
-	        $this->_updateCookie(array(
+	        $cookieData = array(
 	    		'userId' => $userId,
 	        	'startTimeStamp' => $startTimeStamp,
 	        	'userData' => $userData,
 	        	'liv' => md5($userData.self::$_md5salt.$userId.self::$_md5salt2.$startTimeStamp)
-	        ));
+	        );
+	        $this->_updateCookie($cookieData);
 	        $this->_isLogin = true;
-	        return true;
+	        return $cookieData;
 		} else {
 			return false;
 		}
