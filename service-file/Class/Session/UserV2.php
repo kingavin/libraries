@@ -117,7 +117,7 @@ class Class_Session_UserV2 extends App_Session_SsoUser
 // 			}
 			if($this->getUserData('userType') != 'designer') {
 				$siteIds = $this->getUserData('siteIds');
-				$siteIdsArr = implode(',', $siteIds);
+				$siteIdsArr = explode(",", $siteIds);
 				if(in_array($siteId, $siteIdsArr)) {
 					return true;
 				} else {
