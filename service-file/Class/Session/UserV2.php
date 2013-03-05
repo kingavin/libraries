@@ -56,7 +56,7 @@ class Class_Session_UserV2 extends App_Session_SsoUser
 		$startTimeStamp = time();
 		$userDataArr = array();
 		foreach ($user->children() as $tag => $val) {
-	    	$userDataArr[$tag] = (string)$val;
+	    	$userDataArr[$tag] = $val;
 	    }
 	    $userData = Zend_Json::encode($userDataArr);
 		$liv = self::getLiv($userData, $userId, $startTimeStamp);
@@ -111,10 +111,10 @@ class Class_Session_UserV2 extends App_Session_SsoUser
 			return true;
 		} else if($routeName == 'default' || $routeName == 'rest') {
 			$siteId = Class_Server::getSiteId();
-			$siteDoc = Class_RemoteServerV2::getSiteDoc($siteId);
-			if(is_null($siteDoc)) {
-				return false;
-			}
+			//$siteDoc = Class_RemoteServerV2::getSiteDoc($siteId);
+// 			if(is_null($siteDoc)) {
+// 				return false;
+// 			}
 			if($this->getUserData('userType') != 'designer') {
 				$siteIds = $this->getUserData('siteIds');
 				if(in_array($siteId, $siteIds)) {
