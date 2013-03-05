@@ -116,8 +116,7 @@ class Class_Session_User extends App_Session_SsoUser
 				return false;
 			}
 			if($this->getUserData('userType') != 'designer') {
-				$siteIds = $this->getUserData('siteIds');
-				if(in_array($siteId, $siteIds)) {
+				if($this->getUserData('orgCode') == $siteDoc->orgCode) {
 					return true;
 				} else {
 					return false;
