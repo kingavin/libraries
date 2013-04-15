@@ -2,7 +2,7 @@
 class Class_Mongo_Storage_Doc extends App_Mongo_Db_Document
 {
 	protected $_field = array(
-			"orgCode",
+			"siteId",
 			"imageFileCount",
 			"otherFileCount",
 			"totalCapacity",
@@ -64,12 +64,12 @@ class Class_Mongo_Storage_Doc extends App_Mongo_Db_Document
 		$this->save();
 	}
 	
-	public function recalculateCapacity($file,$orgCode)
+	public function recalculateCapacity($files, $siteId)
 	{
 		$recalculate['sizeCount'] = 0;
 		$recalculate['imageFileCount'] = 0;
 		$recalculate['otherFileCount'] = 0;
-		foreach ($file as $num => $fileinfomation){
+		foreach ($files as $fileinfomation){
 			$recalculate['sizeCount']+= ceil($fileinfomation->size/1024);
 			if($fileinfomation->isImage){
 				$recalculate['imageFileCount']++;
@@ -79,7 +79,7 @@ class Class_Mongo_Storage_Doc extends App_Mongo_Db_Document
 		}
 		$recalculate['sizeCount']+= 189440;
 		$arrstorage = array(
-				'orgCode' => $orgCode,
+				'siteId' => $siteId,
 				'imageFileCount' => $recalculate['imageFileCount'],
 				'avFileCount' => 0,
 				'otherFileCount' => $recalculate['otherFileCount'],
